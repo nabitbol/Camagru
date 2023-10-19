@@ -1,0 +1,9 @@
+{
+  "name": "@camagru/common-exemples",
+  "version": "1.0.0",
+  "description": "Exemples of common functions",
+  "main": "index.js",
+  "author": "nabitbol",
+  "license": "MIT",
+  "private": true
+}

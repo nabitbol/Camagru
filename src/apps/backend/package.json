@@ -1,0 +1,12 @@
+{
+  "name": "@camagru/backend",
+  "version": "1.0.0",
+  "description": "The backend of camagru",
+  "main": "index.js",
+  "author": "nabitbol",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@camagru/common-exemples": "1.0.0"
+  }
+}
