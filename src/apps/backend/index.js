@@ -1,3 +1,3 @@
-const demo = require("@camagru/common-exemples");
+import commonExemples from '@camagru/common-exemples'
 
-demo.demo()
+commonExemples()

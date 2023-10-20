@@ -1,3 +1,3 @@
-exports.demo = () => {
+export default () => {
 	console.log("test")
 };

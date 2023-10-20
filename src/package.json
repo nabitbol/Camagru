@@ -7,6 +7,11 @@
   "author": "nabitbol",
   "license": "MIT",
   "private": "true",
+  "scripts":{
+    "backend": "yarn workspace @camagru/backend start",
+    "backend--watch": "yarn workspace @camagru/backend start--watch",
+    "frontend": "yarn workspace @camagru/frontend dev"
+  },
   "workspaces":[
     "apps/*",
     "common/*"

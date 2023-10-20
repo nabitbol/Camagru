@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "description": "The backend of camagru",
   "main": "index.js",
+  "type": "module",
   "author": "nabitbol",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "start--watch": "nodemon index.js"
+  },
   "dependencies": {
     "@camagru/common-exemples": "1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
