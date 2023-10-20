@@ -6,10 +6,11 @@
   "type": "module",
   "author": "nabitbol",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "start": "node index.js",
-    "start--watch": "nodemon index.js"
+    "start--watch": "nodemon index.js",
+    "lint": "eslint"
+
   },
   "dependencies": {
     "@camagru/common-exemples": "1.0.0"

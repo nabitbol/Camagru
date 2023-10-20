@@ -7,13 +7,21 @@
   "author": "nabitbol",
   "license": "MIT",
   "private": "true",
-  "scripts":{
+  "scripts": {
     "backend": "yarn workspace @camagru/backend start",
     "backend--watch": "yarn workspace @camagru/backend start--watch",
-    "frontend": "yarn workspace @camagru/frontend dev"
+    "frontend": "yarn workspace @camagru/frontend dev",
+    "lint": "eslint"
   },
-  "workspaces":[
+  "workspaces": [
     "apps/*",
     "common/*"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^8.51.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1"
+  }
 }

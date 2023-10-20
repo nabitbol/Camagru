@@ -5,6 +5,5 @@
   "main": "index.js",
   "type":"module",
   "author": "nabitbol",
-  "license": "MIT",
-  "private": true
+  "license": "MIT"
 }
