@@ -1,3 +1,5 @@
-import server from "./server.js";
+import { ServerInstanciator } from "./server.js";
 
-export default server;
+const Server = ServerInstanciator;
+
+export default Server;
