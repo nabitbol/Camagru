@@ -1,0 +1,10 @@
+{
+  "name": "@camagru/myexpress",
+  "version": "1.0.0",
+  "description": "Http module wrapper inspired by mircoframework expressjs (use to create server easily with nodejs)",
+  "main": "index.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT",
+  "private": true
+}

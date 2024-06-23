@@ -1,3 +1,12 @@
-import commonExemples from '@camagru/common-exemples'
+import MyExpress from "@camagru/myexpress";
 
-commonExemples()
+const main = () => {
+  const port = 30000;
+  const host = "127.0.0.1";
+
+  const app = MyExpress();
+
+  app.listen(port, host);
+};
+
+main();
