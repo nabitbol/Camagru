@@ -6,14 +6,13 @@ const simpleText = (req, res) => {
 };
 
 const main = () => {
-  const port = 30000;
+  const port = 3000;
   const host = "127.0.0.1";
 
   const app = MyExpress();
 
   app.listen(port, host);
   app.get("/test", simpleText);
-  // app.use("/", usersRoutes);
 };
 
 main();
