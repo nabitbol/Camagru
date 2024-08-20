@@ -23,15 +23,6 @@ const Server = class {
     });
   }
 
-  use(path, handler) {
-    this.server.on((req, res, next) => {
-      if (req.url === path) {
-        handler(req, res, next);
-        next();
-      }
-    });
-  }
-
   get(path, handler) {
     this.server.on("request", (req, res, next) => {
       if (req.method === "GET" && req.url === path) handler(req, res, next);
