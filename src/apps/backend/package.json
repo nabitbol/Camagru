@@ -10,7 +10,6 @@
     "start": "node index.js",
     "start--watch": "nodemon index.js",
     "lint": "eslint"
-
   },
   "dependencies": {
     "@camagru/common-exemples": "1.0.0"
