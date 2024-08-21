@@ -6,10 +6,19 @@ document.camagru = {
   validatePassword: (password) => /^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/.test(password),
 
   fetch: async (method, url, body) => {
-    console.log({ method, url, body })
-    // return (await fetch(url, {
-    //   method,
-    //   body: JSON.stringify(body)
-    // })).json();
+    console.debug({ method, url, body })
+
+    try {
+      const response = await fetch(url, {
+        method,
+        body: JSON.stringify(body)
+      })
+
+      const data = response.json()
+
+      return data;
+    } catch (err) {
+      window.location.replace('/errors/500.html')
+    }
   }
 };
