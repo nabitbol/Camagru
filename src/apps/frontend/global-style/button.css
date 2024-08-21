@@ -1,4 +1,4 @@
-button {
+button, a button {
   border: none;
   padding: 5px 10px;
   font-weight: bold;
@@ -6,6 +6,7 @@ button {
   background-color: #cecece;
   color: #000;
   cursor: pointer;
+  width: 100%;
 }
 
 button.primary {

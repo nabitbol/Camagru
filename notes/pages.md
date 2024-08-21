@@ -1,13 +1,13 @@
 # Pages
 
 - [x] Sign up
-  - [ ] Success
-- [ ] Verifiy E-mail
+  - [x] Success
+- [x] Verifiy E-mail
 - [x] Sign in
 - [x] Send password reset
-  - [ ] Success
+  - [x] Success
 - [x] Reset password
-  - [ ] Success
+  - [x] Success
 
 - [ ] Gallery
 - [ ] Image
