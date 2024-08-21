@@ -3,9 +3,9 @@
 - [ ] Sign up
 - [ ] Sign up success
 - [ ] Verifiy E-mail
-- [ ] Sign in
-- [ ] Send password reset
-- [ ] Reset password
+- [x] Sign in
+- [x] Send password reset
+- [x] Reset password
 - [ ] Gallery
 - [ ] Image
 - [ ] Camera

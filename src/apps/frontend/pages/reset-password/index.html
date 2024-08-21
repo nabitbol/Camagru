@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../../global-style/main.css">
+  <script src="../../global-scripts/main.js"></script>
+  <script src="main.js"></script>
+
+  <title>Reset password</title>
+</head>
+<body>
+  <div class="unauthenticated-layout">
+    <div class="container">
+      <h1>Reset password</h1>
+      <div class="input">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="xxxxxxxxxxx">
+        <p id="password-error" class="error hidden">Invalid password</p>
+      </div>
+      <div class="input">
+        <label>Repeat password</label>
+        <input id="password-repeat" type="password" placeholder="xxxxxxxxxxx">
+        <p id="password-repeat-error" class="error hidden">Passwords do not match</p>
+      </div>
+      <button class="primary" onClick="resetPassword()">Reset password</button>
+    </div>
+  </div>
+</body>
+</html>
