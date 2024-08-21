@@ -1,0 +1,14 @@
+button {
+  border: none;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  background-color: #cecece;
+  color: #000;
+  cursor: pointer;
+}
+
+button.primary {
+  background-color: #4bb4f8;
+  color: #ffffff;
+}
