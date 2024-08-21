@@ -23,11 +23,10 @@ const resetPassword = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/reset-password/send', { password, token })
+    await document.camagru.fetch('POST', '/reset-password/send', { password, token });
   } catch (err) {
-    // credentialsError.classList.remove('hidden');
-    // return;
+    return console.error(err);
   }
 
-  // window.location.replace('signin')
+  window.location.replace('signin');
 }

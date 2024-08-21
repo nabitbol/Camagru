@@ -36,10 +36,10 @@ const signup = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/signup', { email, password })
+    await document.camagru.fetch('POST', '/signup', { email, username, password })
   } catch (err) {
-    return;
+    return console.error(err);
   }
 
-  window.location.replace('success.html')
+  window.location.replace('success.html');
 }

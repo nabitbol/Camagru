@@ -4,21 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="../../global-style/main.css">
+  <link rel="stylesheet" type="text/css" href="../../global-style/main.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="../../global-scripts/main.js"></script>
   <script src="main.js"></script>
 
-  <title>Sign up</title>
+  <title>Sign in</title>
 </head>
 <body>
   <div class="unauthenticated-layout">
     <div class="container">
-      <h1>Sign up</h1>
-      <div class="input">
-        <label>Username</label>
-        <input id="username" type="username" placeholder="MyCoolName">
-        <p id="username-error" class="error hidden">Invalid username</p>
-      </div>
+      <h1>Sign in</h1>
+      <p id="invalid-credentials-error" class="error hidden">Invalid credentials</p>
       <div class="input">
         <label>Email address</label>
         <input id="email" type="email" placeholder="your@email.com">
@@ -28,13 +25,11 @@
         <label>Password</label>
         <input id="password" type="password" placeholder="xxxxxxxxxxx">
         <p id="password-error" class="error hidden">Invalid password</p>
+        <div class="reset-password">
+          <a href="/request-password-reset/index.html">Reset password</a>
+        </div>
       </div>
-      <div class="input">
-        <label>Repeat password</label>
-        <input id="password-repeat" type="password" placeholder="xxxxxxxxxxx">
-        <p id="password-repeat-error" class="error hidden">Passwords do not match</p>
-      </div>
-      <button class="primary" onClick="signup()">Sign up</button>
+      <button class="primary" onClick="signup()">Sign in</button>
     </div>
   </div>
 </body>

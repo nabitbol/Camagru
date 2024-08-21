@@ -13,11 +13,10 @@ const requestPasswordReset = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/reset-password/send', { email })
+    await document.camagru.fetch('POST', '/reset-password/send', { email });
   } catch (err) {
-    // credentialsError.classList.remove('hidden');
-    // return;
+    return console.error(err);
   }
 
-  window.location.replace('success.html')
+  window.location.replace('success.html');
 }

@@ -26,7 +26,7 @@ const signup = async () => {
     await document.camagru.fetch('POST', '/signin', { email, password })
   } catch (err) {
     credentialsError.classList.remove('hidden');
-    return;
+    return console.error(err);
   }
 
   window.location.replace('/galery')
