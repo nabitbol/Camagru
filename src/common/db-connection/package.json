@@ -1,0 +1,9 @@
+{
+  "name": "@camagru/db-connection",
+  "version": "1.0.0",
+  "description": "Connection to the postgresql database",
+  "main": "index.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@camagru/db-client",
+  "version": "1.0.0",
+  "description": "Database client query layout",
+  "main": "index.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT"
+}
