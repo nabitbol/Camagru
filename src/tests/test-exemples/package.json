@@ -1,0 +1,9 @@
+{
+  "name": "@camagru/test-exemples",
+  "version": "1.0.0",
+  "description": "Exemples of common tests",
+  "main": "index.test.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT"
+}
