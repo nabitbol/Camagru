@@ -12,8 +12,8 @@ class QueryBuilder {
   insert(table, columns, toInsert) {
     this.query += `INSERT INTO ${table} (${columns.join(
       ", "
-    )}) VALUES (${Object.keys(toInsert).map(
-      (key, index) => ` $${index + 1}`
+    )}) VALUES (${Object.keys(toInsert).map((key, index) =>
+      index == 0 ? `$${index + 1}` : ` $${index + 1}`
     )})`;
     this.values = Object.values(toInsert);
     return this;
@@ -25,8 +25,8 @@ class QueryBuilder {
   }
 
   where(toFind) {
-    this.query += ` WHERE ${Object.keys(toFind).map(
-      (key, index) => ` ${key} = $${index + 1}`
+    this.query += ` WHERE ${Object.keys(toFind).map((key, index) =>
+      index == 0 ? `${key} = $${index + 1}` : ` ${key} = $${index + 1}`
     )}`;
     this.values = Object.values(toFind);
     return this;
