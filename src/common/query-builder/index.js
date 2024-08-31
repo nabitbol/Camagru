@@ -1,7 +1,12 @@
+import pg from "pg";
+
+const { Pool } = pg;
+
 class QueryBuilder {
-  constructor() {
+  constructor(pgConfig) {
     this.query = "";
     this.value = [];
+    this.pool = new Pool(pgConfig);
   }
 
   select(columns) {
@@ -43,6 +48,24 @@ class QueryBuilder {
     this.query = "";
     this.values = [];
     return { text, values };
+  }
+
+  /*
+   ** The Pool is preferred because it manages connections automatically,
+   ** allowing you to run queries without manually handling the connection lifecycle.
+   ** Unlike the Client, which requires you to explicitly await a connection
+   ** and close it when done, the Pool takes care of these tasks for you.
+   ** Details node-pg doc https://node-postgres.com/apis/pool#poolquery
+   **
+   */
+
+  async run() {
+    try {
+      const res = await this.pool.query(this.query, this.values);
+      return res;
+    } catch (err) {
+      throw err;
+    }
   }
 }
 

@@ -5,5 +5,8 @@
   "main": "index.js",
   "type": "module",
   "author": "nabitbol",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.12.0"
+  }
 }
