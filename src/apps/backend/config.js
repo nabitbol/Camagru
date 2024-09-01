@@ -25,14 +25,13 @@ const pgConfig = {
 /*                                 config mail                                */
 /* -------------------------------------------------------------------------- */
 
-// Use `true` for port 465, `false` for all other ports
+// Use secrue:true for port 465, `false` for all other ports
 const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  host: process.env.MAIL_HOST,
+  port: process.env.MAIL_PORT,
   auth: {
-    user: "ike.sauer@ethereal.email", // generated ethereal user
-    pass: "JXqEEvKkDdGcWfgRwH", // generated ethereal password
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWORD,
   },
 });
 

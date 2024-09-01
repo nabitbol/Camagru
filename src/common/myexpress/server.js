@@ -37,7 +37,7 @@ const Server = class {
     });
   }
 
-  #callHandler(method, path, ...handlers) {
+  #callHandler(method, path, handlers) {
     this.server.on("request", (req, res) => {
       if (req.method === method && req.url === path)
         addBodyRequestAndCallHandler(req, res, handlers);

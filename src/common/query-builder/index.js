@@ -32,7 +32,7 @@ class QueryBuilder {
   insert(table, toInsert) {
     const columns = Object.keys(toInsert);
     this.query += `INSERT INTO ${table} (${columns.join(", ")})`;
-    this.#addValues(toUpdate);
+    this.#addValues(toInsert);
     this.#stackVaulesList();
     return this;
   }

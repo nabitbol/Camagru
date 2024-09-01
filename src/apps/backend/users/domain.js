@@ -25,7 +25,7 @@ const hashString = async (toHash) => {
 
 const getVerifyEmailContent = (userEmail, username, verificationToken) => {
   return {
-    from: '"Camagru team 📷" <ike.sauer@ethereal.email>',
+    from: '"Camagru team 📷" <wilfrid.stokes63@ethereal.email>',
     to: userEmail,
     subject: "Verification email ✔",
     text: `Welcome ${username}! \n\n We are thrille to count you in. \n\n\
@@ -56,23 +56,23 @@ const addUser = async (userData) => {
 };
 
 const sendVerificationEmail = async (
-  verificationToken,
   userEmail,
-  username
+  username,
+  verificationToken
 ) => {
-  const info = await transporter.sendMail(
-    getVerifyEmailContent(userEmail, username, verificationToken)
-  );
+  try {
+    const info = await transporter.sendMail(
+      getVerifyEmailContent(userEmail, username, verificationToken)
+    );
 
-  console.log("Message sent: %s", info.messageId);
+    console.log("Message sent: %s", info.messageId);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const signUp = async (req, res) => {
-  const { email, username, password } = {
-    username: "Ike Sauer",
-    email: "ike.sauer@ethereal.email",
-    password: "JXqEEvKkDdGcWfgRwH",
-  };
+  const { email, username, password } = req.body;
 
   try {
     await isExisitingUser(email);
