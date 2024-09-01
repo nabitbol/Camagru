@@ -7,6 +7,20 @@ const defaultHealthCheck = (req, res) => {
   }
 };
 
+const addBodyRequestAndCallHandler = (req, res, handlers) => {
+  let body = [];
+
+  req
+    .on("data", (chunk) => {
+      body.push(chunk);
+    })
+    .on("end", () => {
+      const tmp = Buffer.concat(body).toString();
+      if (tmp) req.body = JSON.parse(tmp);
+      handlers.forEach((handler) => handler(req, res));
+    });
+};
+
 const Server = class {
   constructor(healthCheckFunc) {
     this.server = http.createServer(
@@ -23,28 +37,27 @@ const Server = class {
     });
   }
 
-  get(path, handler) {
-    this.server.on("request", (req, res, next) => {
-      if (req.method === "GET" && req.url === path) handler(req, res, next);
+  #callHandler(method, path, ...handlers) {
+    this.server.on("request", (req, res) => {
+      if (req.method === method && req.url === path)
+        addBodyRequestAndCallHandler(req, res, handlers);
     });
   }
 
-  post(path, handler) {
-    this.server.on("request", (req, res, next) => {
-      if (req.method === "POST" && req.url === path) handler(req, res, next);
-    });
+  get(path, ...handlers) {
+    this.#callHandler("GET", path, handlers);
   }
 
-  put(path, handler) {
-    this.server.on("request", (req, res, next) => {
-      if (req.method === "PUT" && req.url === path) handler(req, res, next);
-    });
+  post(path, ...handlers) {
+    this.#callHandler("POST", path, handlers);
   }
 
-  delete(path, handler) {
-    this.server.on("request", (req, res, next) => {
-      if (req.method === "DELETE" && req.url === path) handler(req, res, next);
-    });
+  put(path, ...handlers) {
+    this.#callHandler("PUT", path, handlers);
+  }
+
+  delete(path, ...handlers) {
+    this.#callHandler("DELETE", path, handlers);
   }
 };
 
