@@ -7,7 +7,7 @@ const defaultHealthCheck = (req, res) => {
   }
 };
 
-const addBodyRequestAndCallHandler = (handler, req, res) => {
+const addBodyRequestAndCallHandler = (req, res, handlers) => {
   let body = [];
 
   req
@@ -17,7 +17,7 @@ const addBodyRequestAndCallHandler = (handler, req, res) => {
     .on("end", () => {
       const tmp = Buffer.concat(body).toString();
       if (tmp) req.body = JSON.parse(tmp);
-      handler(req, res);
+      handlers.forEach((handler) => handler(req, res));
     });
 };
 
@@ -37,27 +37,27 @@ const Server = class {
     });
   }
 
-  #callHandler(method, path, handler) {
+  #callHandler(method, path, ...handlers) {
     this.server.on("request", (req, res) => {
       if (req.method === method && req.url === path)
-        addBodyRequestAndCallHandler(handler, req, res);
+        addBodyRequestAndCallHandler(req, res, handlers);
     });
   }
 
-  get(path, handler) {
-    this.#callHandler("GET", path, handler);
+  get(path, ...handlers) {
+    this.#callHandler("GET", path, handlers);
   }
 
-  post(path, handler) {
-    this.#callHandler("POST", path, handler);
+  post(path, ...handlers) {
+    this.#callHandler("POST", path, handlers);
   }
 
-  put(path, handler) {
-    this.#callHandler("PUT", path, handler);
+  put(path, ...handlers) {
+    this.#callHandler("PUT", path, handlers);
   }
 
-  delete(path, handler) {
-    this.#callHandler("DELETE", path, handler);
+  delete(path, ...handlers) {
+    this.#callHandler("DELETE", path, handlers);
   }
 };
 

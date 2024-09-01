@@ -1,5 +1,9 @@
 import MyExpress from "@camagru/myexpress";
 
+const simpleTest = (req, res) => {
+  console.log("test");
+};
+
 const simpleText = (req, res) => {
   res.writeHead(200, { "Content-type": "text/plain" });
   res.end("toto");
@@ -12,7 +16,7 @@ const main = () => {
   const app = MyExpress();
 
   app.listen(port, host);
-  app.get("/test", simpleText);
+  app.get("/test", simpleTest, simpleText);
 };
 
 main();
