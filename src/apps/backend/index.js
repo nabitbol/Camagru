@@ -1,6 +1,5 @@
 import MyExpress from "@camagru/myexpress";
-import { pgConfig } from "./config.js";
-import QueryBuilder from "@camagru/query-builder";
+import { signUp } from "./users/domain.js";
 
 const simpleText = async (req, res) => {
   res.writeHead(200, { "Content-type": "text/plain" });
@@ -14,7 +13,7 @@ const main = () => {
   const app = MyExpress();
 
   app.listen(port, host);
-  app.get("/test", simpleText);
+  app.get("/test", signUp);
 };
 
 main();

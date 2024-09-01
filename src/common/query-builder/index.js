@@ -5,22 +5,45 @@ const { Pool } = pg;
 class QueryBuilder {
   constructor(pgConfig) {
     this.query = "";
-    this.value = [];
+    this.values = [];
+    this.countValues = 0;
     this.pool = new Pool(pgConfig);
   }
+
+  #stackVaulesList = () => {
+    const valuesArray = Array.from(
+      { length: this.values.length },
+      (_, index) => `$${index + 1}`
+    );
+
+    this.query += ` VALUES (${valuesArray.join(", ")})`;
+  };
+
+  #addValues = (toAdd) => {
+    const tmp = this.values;
+    this.values = tmp.concat(Object.values(toAdd));
+  };
 
   select(columns) {
     this.query += `SELECT ${columns.join(", ")}`;
     return this;
   }
 
-  insert(table, columns, toInsert) {
-    this.query += `INSERT INTO ${table} (${columns.join(
-      ", "
-    )}) VALUES (${Object.keys(toInsert).map((key, index) =>
-      index == 0 ? `$${index + 1}` : ` $${index + 1}`
-    )})`;
-    this.values = Object.values(toInsert);
+  insert(table, toInsert) {
+    const columns = Object.keys(toInsert);
+    this.query += `INSERT INTO ${table} (${columns.join(", ")})`;
+    this.#addValues(toUpdate);
+    this.#stackVaulesList();
+    return this;
+  }
+
+  update(table, toUpdate) {
+    this.query += `UPDATE ${table} SET ${Object.keys(toUpdate).map(
+      (key, index) =>
+        index == 0 ? `${key} = $${index + 1}` : ` ${key} = $${index + 1}`
+    )}`;
+    this.#addValues(toUpdate);
+    this.countValues += Object.keys(toUpdate).length;
     return this;
   }
 
@@ -31,9 +54,11 @@ class QueryBuilder {
 
   where(toFind) {
     this.query += ` WHERE ${Object.keys(toFind).map((key, index) =>
-      index == 0 ? `${key} = $${index + 1}` : ` ${key} = $${index + 1}`
+      index + this.countValues == 0
+        ? `${key} = $${index + this.countValues + 1}`
+        : ` ${key} = $${index + this.countValues + 1}`
     )}`;
-    this.values = Object.values(toFind);
+    this.#addValues(toFind);
     return this;
   }
 
@@ -47,6 +72,7 @@ class QueryBuilder {
     const values = this.values;
     this.query = "";
     this.values = [];
+    this.countValues = 0;
     return { text, values };
   }
 
@@ -62,6 +88,9 @@ class QueryBuilder {
   async run() {
     try {
       const res = await this.pool.query(this.query, this.values);
+      this.query = "";
+      this.values = [];
+      this.countValues = 0;
       return res;
     } catch (err) {
       throw err;
