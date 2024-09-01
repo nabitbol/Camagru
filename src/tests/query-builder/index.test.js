@@ -11,7 +11,7 @@ const data = {
 const limit = 10;
 
 describe("Insert Query", () => {
-  const query = queryBuilder.insert(table, Object.keys(data), data).build();
+  const query = queryBuilder.insert(table, data).build();
 
   it("Test text", () => {
     expect(query.text).toEqual(
@@ -36,6 +36,19 @@ describe("Select Query", () => {
     expect(query.text).toEqual(
       `SELECT email FROM ${table} WHERE email = $1 LIMIT ${limit}`
     );
+  });
+
+  it("Test values", () => {
+    expect(query.values).toEqual(["test@test.t"]);
+  });
+});
+
+describe("Update Query", () => {
+  const query = queryBuilder.update(table, { email: data.email }).build();
+  const columns = "email";
+
+  it("Test text", () => {
+    expect(query.text).toEqual(`UPDATE ${table} SET ${columns} = $1`);
   });
 
   it("Test values", () => {
