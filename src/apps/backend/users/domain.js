@@ -10,7 +10,7 @@ import { pgConfig, transporter } from "../config.js";
 const queryBuilder = new QueryBuilder(pgConfig);
 const userDataAccess = UserDataAccess(queryBuilder);
 
-/* --------------------------------- hashing -------------------------------- */
+/* --------------------------------- sign-up -------------------------------- */
 
 const hashString = async (toHash) => {
   try {
@@ -20,8 +20,6 @@ const hashString = async (toHash) => {
     console.log(err);
   }
 };
-
-/* --------------------------------- sign-up -------------------------------- */
 
 const getVerifyEmailContent = (userEmail, username, verificationToken) => {
   return {
