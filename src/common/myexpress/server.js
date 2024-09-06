@@ -11,6 +11,9 @@ const addBodyRequestAndCallHandler = (req, res, handlers) => {
   let body = [];
 
   req
+    .on("error", () => {
+      console.error(err.stack);
+    })
     .on("data", (chunk) => {
       body.push(chunk);
     })

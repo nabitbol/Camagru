@@ -1,0 +1,79 @@
+
+###
+POST http://localhost:3000/signup
+content-type: application/json
+
+{
+    "email": "string",
+    "username": "string",
+    "passwor": "string"   
+}
+
+###
+POST http://localhost:3000/signup/verify-email
+content-type: application/json
+
+{
+    "token": "string" 
+}
+
+###
+POST http://localhost:3000/signin
+content-type: application/json
+
+{
+    "email": "string",
+    "password": "string"
+}
+
+###
+POST http://localhost:3000/reset-password/send
+content-type: application/json
+
+{
+    "email": "string"
+}
+
+###
+POST http://localhost:3000/reset-password/verify
+content-type: application/json
+
+
+{
+    "password": "string"
+}
+
+###
+GET http://localhost:3000/images/
+
+###
+GET http://localhost:3000/images/:id
+
+###
+POST http://localhost:3000/images/:id/comment
+content-type: application/json
+
+{
+    "comments": "string"
+}
+
+###
+POST http://localhost:3000/images/:id/toggle-like
+content-type: application/json
+
+###
+POST http://localhost:3000/images
+content-type: application/json
+
+###
+GET http://localhost:3000/profile
+
+###
+POST http://localhost:3000/profile
+content-type: application/json
+
+{
+    "email": "string",
+    "username": "boolean",
+    "emailNotifications": "boolean"
+}

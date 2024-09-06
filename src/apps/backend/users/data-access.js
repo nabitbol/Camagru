@@ -42,4 +42,4 @@ const UserDataAccess = (queryBuilder) => {
   };
 };
 
-export { UserDataAccess };
+export default UserDataAccess;

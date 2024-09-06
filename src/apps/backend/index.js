@@ -1,5 +1,9 @@
 import MyExpress from "@camagru/myexpress";
-import { signUp } from "./users/domain.js";
+import QueryBuilder from "@camagru/query-builder";
+import UserDataAccess from "./users/data-access.js";
+import UserControllers from "./users/api.js";
+import UserServices from "./users/domain.js";
+import { pgConfig } from "./config.js";
 
 const simpleTest = (req, res) => {
   console.log("test");
@@ -16,9 +20,14 @@ const main = () => {
 
   const app = MyExpress();
 
+  const queryBuilder = new QueryBuilder(pgConfig);
+  const userDataAccess = UserDataAccess(queryBuilder);
+  const userServices = UserServices(userDataAccess);
+  const userControllers = UserControllers(userServices);
+
   app.listen(port, host);
   app.get("/test", simpleTest, simpleText);
-  app.get("/sign-up", signUp);
+  app.get("/sign-up", userControllers.signUp);
 };
 
 main();

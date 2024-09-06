@@ -11,7 +11,7 @@
 ## User features
 
 - [ ] Sign up
-    - [ ] email verificatioN
+    - [ ] email verification
 - [ ] Sign in
 - [ ] Password reset
 - [ ] Disconnect
