@@ -1,5 +1,5 @@
 {
-  "name": "@camagru/response",
+  "name": "@camagru/http-response",
   "version": "1.0.0",
   "description": "This is a simple query builder that enable the user to create easily postgresql request.",
   "main": "index.js",

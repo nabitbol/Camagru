@@ -54,7 +54,7 @@ class QueryBuilder {
 
   where(toFind) {
     this.query += ` WHERE ${Object.keys(toFind).map((key, index) =>
-      index + this.countValues == 0
+      index == 0
         ? `${key} = $${index + this.countValues + 1}`
         : ` ${key} = $${index + this.countValues + 1}`
     )}`;

@@ -44,14 +44,19 @@ describe("Select Query", () => {
 });
 
 describe("Update Query", () => {
-  const query = queryBuilder.update(table, { email: data.email }).build();
+  const query = queryBuilder
+    .update(table, { email: data.email })
+    .where({ email: "sample@test.mail" })
+    .build();
   const columns = "email";
 
   it("Test text", () => {
-    expect(query.text).toEqual(`UPDATE ${table} SET ${columns} = $1`);
+    expect(query.text).toEqual(
+      `UPDATE ${table} SET ${columns} = $1 WHERE ${columns} = $2`
+    );
   });
 
   it("Test values", () => {
-    expect(query.values).toEqual(["test@test.t"]);
+    expect(query.values).toEqual(["test@test.t", "sample@test.mail"]);
   });
 });

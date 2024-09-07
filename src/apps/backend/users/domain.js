@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import * as argon2 from "argon2";
-import { transporter } from "../config.js";
+import { transporter, backendBaseUrl, backendPort } from "../config.js";
+import UserDataAccess from "./data-access.js";
 
 //TODO add error handling
 //TODO input verification
@@ -15,7 +16,7 @@ To verify your account please on the link below: ${verificationToken}`,
     html: `<h1>Welcome ${username}!</h1> \
 <p>We are thrille to count you in.</p>\
 <p>To verify your account please on the link below: \
-<strong alt="link to validate your account">${verificationToken}\
+<strong alt="link to validate your account">${backendBaseUrl}:${backendPort}${verificationToken}\
 </strong></p>`,
   };
 };
@@ -26,16 +27,18 @@ const UserServices = (userDataAccess) => {
       const hash = await argon2.hash(toHash);
       return hash;
     } catch (err) {
-      console.log(err);
+      console.log(`Error: ${err.message}`);
+      throw new Error("Couldn't hash string");
     }
   };
 
   const isExisitingUser = async (email) => {
     try {
       const existingUser = await userDataAccess.getUserFromEmail({ email });
-      if (existingUser) throw new Error("Email already in use");
+      return existingUser ? true : false;
     } catch (err) {
-      throw err;
+      console.log(`Error: ${err.message}`);
+      throw new Error("Couldn't get user from email");
     }
   };
 
@@ -44,7 +47,12 @@ const UserServices = (userDataAccess) => {
   };
 
   const addUser = async (userData) => {
-    await userDataAccess.addUser(userData);
+    try {
+      await userDataAccess.addUser(userData);
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+      throw new Error("Couldn't addd user");
+    }
   };
 
   const sendVerificationEmail = async (
@@ -59,7 +67,26 @@ const UserServices = (userDataAccess) => {
 
       console.log("Message sent: %s", info.messageId);
     } catch (err) {
-      console.log(err);
+      console.log(`Error: ${err.message}`);
+      throw new Error("Couldn't send verification e-mail");
+    }
+  };
+
+  const getUserFromToken = async (token) => {
+    try {
+      const userData = await userDataAccess.getUserFromToken(token);
+      if (!userData) throw new Error("User not found");
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const updateUserVerifiedStatus = async (userData) => {
+    try {
+      await UserDataAccess.updateUser(userData, { email_verified: true });
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+      throw new Error("Couldn't update user data");
     }
   };
 
@@ -69,6 +96,8 @@ const UserServices = (userDataAccess) => {
     getVerificationToken,
     sendVerificationEmail,
     hashString,
+    getUserFromToken,
+    updateUserVerifiedStatus,
   };
 };
 

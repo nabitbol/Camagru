@@ -36,5 +36,12 @@ const transporter = nodemailer.createTransport({
 });
 
 /* -------------------------------------------------------------------------- */
+/*                                  Web info                                  */
+/* -------------------------------------------------------------------------- */
 
-export { pgConfig, transporter };
+const backendBaseUrl = process.env.BACKEND_BASE_URL;
+const backendPort = process.env.BACKEND_PORT;
+
+/* -------------------------------------------------------------------------- */
+
+export { pgConfig, transporter, backendBaseUrl, backendPort };
