@@ -10,8 +10,8 @@
 
 ## User features
 
-- [ ] Sign up
-    - [ ] email verification
+- [x] Sign up
+    - [x] email verification
 - [ ] Sign in
 - [ ] Password reset
 - [ ] Disconnect
@@ -35,3 +35,11 @@
 - [ ] Upload image
 - [ ] CRUD
 - [ ] List of superposbale images
+
+## Bonus
+
+- [ ] Add ability to connect with Google
+- [ ] Grab image from Google Drive
+- [ ] Add postfic mail server
+- [ ] Set up cloud deployment
+- [ ] Connect to imagen to generate image

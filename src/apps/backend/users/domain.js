@@ -7,6 +7,7 @@ import UserDataAccess from "./data-access.js";
 //TODO input verification
 
 const getVerifyEmailContent = (userEmail, username, verificationToken) => {
+  //Swape from email to env variable
   return {
     from: '"Camagru team 📷" <wilfrid.stokes63@ethereal.email>',
     to: userEmail,
@@ -15,9 +16,9 @@ const getVerifyEmailContent = (userEmail, username, verificationToken) => {
 To verify your account please on the link below: ${verificationToken}`,
     html: `<h1>Welcome ${username}!</h1> \
 <p>We are thrille to count you in.</p>\
-<p>To verify your account please on the link below: \
-<strong alt="link to validate your account">${backendBaseUrl}:${backendPort}${verificationToken}\
-</strong></p>`,
+<p>To verify your account please on the link below:</p>\
+<a href="${backendBaseUrl}:${backendPort}/verify/${verificationToken}">link to \
+validate your account </a>`,
   };
 };
 
@@ -75,7 +76,11 @@ const UserServices = (userDataAccess) => {
   const getUserFromToken = async (token) => {
     try {
       const userData = await userDataAccess.getUserFromToken(token);
-      if (!userData) throw new Error("User not found");
+      if (!userData) {
+        console.log(`Error: ${err.message}`);
+        throw new Error("User not found");
+      }
+      return userData;
     } catch (err) {
       throw err;
     }
@@ -83,7 +88,10 @@ const UserServices = (userDataAccess) => {
 
   const updateUserVerifiedStatus = async (userData) => {
     try {
-      await UserDataAccess.updateUser(userData, { email_verified: true });
+      await userDataAccess.updateUser(userData, {
+        email_verified: true,
+        email_verification_token: null,
+      });
     } catch (err) {
       console.log(`Error: ${err.message}`);
       throw new Error("Couldn't update user data");

@@ -1,3 +1,5 @@
+/* ------------------------------- User errors ------------------------------ */
+
 const httpErrorEmailAlreadyUsed = (response, error) => {
   response
     .status(409)
@@ -9,6 +11,16 @@ const httpErrorEmailAlreadyUsed = (response, error) => {
 };
 
 const httpErrorUserInsertion = (response, error) => {
+  response
+    .status(500)
+    .header("Content-Type", "application/json")
+    .body({
+      message: error.message,
+    })
+    .send();
+};
+
+const httpErrorUserUpdate = (response, error) => {
   response
     .status(500)
     .header("Content-Type", "application/json")
@@ -38,6 +50,8 @@ const httpErrorEmailNotSent = (response, error) => {
     .send();
 };
 
+/* ------------------------------ Shared errors ----------------------------- */
+
 const httpDefaultError = (response, error) => {
   response
     .status(500)
@@ -53,5 +67,6 @@ export {
   httpErrorEmailNotSent,
   httpDefaultError,
   httpErrorUserInsertion,
+  httpErrorUserUpdate,
   httpErrorUserNotFound,
 };

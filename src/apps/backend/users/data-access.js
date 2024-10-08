@@ -21,11 +21,8 @@ const UserDataAccess = (queryBuilder) => {
 
   const getUserFromEmail = async (email) => {
     try {
-      const res = await queryBuilder
-        .select(["email"])
-        .from(table)
-        .where(email)
-        .run();
+      const res = await queryBuilder.select(all).from(table).where(email).run();
+      console.log(res.rows[0]);
       return res.rows[0];
     } catch (err) {
       throw err;
@@ -34,7 +31,11 @@ const UserDataAccess = (queryBuilder) => {
 
   const getUserFromToken = async (token) => {
     try {
-      const res = await queryBuilder.select(all).from(table).where(token).run();
+      const res = await queryBuilder
+        .select(all)
+        .from(table)
+        .where({ email_verification_token: token })
+        .run();
       return res.rows[0];
     } catch (err) {
       throw err;

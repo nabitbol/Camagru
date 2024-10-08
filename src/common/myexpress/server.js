@@ -41,31 +41,23 @@ const Server = class {
   }
 
   #checkUrl(path, req) {
-
-    const pathRessources = path.split('/');
-    const reqUrlRessources = req.url.split('/');
+    const pathRessources = path.split("/");
+    const reqUrlRessources = req.url.split("/");
     let params = {};
-    
-    if(reqUrlRessources.length != pathRessources.length)
-      return false;
-    for (let i = 0; i < reqUrlRessources.length; i++) {
 
-      if (pathRessources[i][0] == ':') {
-        const param = pathRessources[i].slice(1)
+    if (reqUrlRessources.length != pathRessources.length) return false;
+    for (let i = 0; i < reqUrlRessources.length; i++) {
+      if (pathRessources[i][0] == ":") {
+        const param = pathRessources[i].slice(1);
         params[param] = reqUrlRessources[i];
         i++;
-      };
-  
-      if (reqUrlRessources[i] !== pathRessources[i])
-        return false;
+      }
 
-    };
+      if (reqUrlRessources[i] !== pathRessources[i]) return false;
+    }
 
     req.params = params;
-    console.log(req.params);
-
     return true;
-
   }
 
   #callHandler(method, path, handlers) {

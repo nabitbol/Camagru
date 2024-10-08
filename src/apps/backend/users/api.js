@@ -5,6 +5,7 @@ import {
   httpErrorEmailNotSent,
   httpErrorUserInsertion,
   httpErrorUserNotFound,
+  httpErrorUserUpdate,
 } from "../http-responses.js";
 
 const UserControllers = (userServices) => {
@@ -33,7 +34,7 @@ const UserControllers = (userServices) => {
         .status(201)
         .header("Content-Type", "application/json")
         .body({
-          content: "ich",
+          content: "Signed up successfully",
         })
         .send();
     } catch (err) {
@@ -42,7 +43,7 @@ const UserControllers = (userServices) => {
           httpErrorEmailAlreadyUsed(response, err);
           break;
         case "Couldn't send verification e-mail":
-          httpErrorEmailNotSent(response, err)
+          httpErrorEmailNotSent(response, err);
           break;
         case "Couldn't addd user":
           httpErrorUserInsertion(response, err);
@@ -58,28 +59,32 @@ const UserControllers = (userServices) => {
     const token = req.params.id;
 
     try {
-      const userData = await userServices.getVerificationToken(token);
+      const userData = await userServices.getUserFromToken(token);
       await userServices.updateUserVerifiedStatus(userData);
-      response.status(202).header("Content-Type", "application/json").send();
+      response
+        .status(202)
+        .header("Content-Type", "application/json")
+        .body({
+          content: "User verified successfully",
+        })
+        .send();
     } catch (err) {
       switch (err.message) {
         case "User not found":
           httpErrorUserNotFound(response, err);
           break;
         case "Couldn't update user data":
-          // add http error for email couldn't be sent
+          httpErrorUserUpdate(response, err);
           break;
         default:
-          httpDefaultError(response, err); 
+          httpDefaultError(response, err);
+      }
     }
   };
-
   return {
     signUp,
-    verifyUser
+    verifyUser,
   };
 };
-
-// .get("/test", simpleText);
 
 export default UserControllers;
