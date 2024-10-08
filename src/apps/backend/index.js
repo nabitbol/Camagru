@@ -28,7 +28,7 @@ const main = () => {
   app.listen(port, host);
   app.get("/test", simpleTest, simpleText);
   app.post("/signup", userControllers.signUp);
-  app.get("/signup/verify-email/:id", userControllers.verifyUser);
+  app.post("/signup/verify-email/:id", userControllers.verifyUser);
 };
 
 main();
