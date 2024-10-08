@@ -22,7 +22,6 @@ const UserDataAccess = (queryBuilder) => {
   const getUserFromEmail = async (email) => {
     try {
       const res = await queryBuilder.select(all).from(table).where(email).run();
-      console.log(res.rows[0]);
       return res.rows[0];
     } catch (err) {
       throw err;
