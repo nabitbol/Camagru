@@ -1,16 +1,16 @@
 {
   "name": "camagru",
   "version": "1.0.0",
-  "description": "THis project is about implementing a social network that unable users to superimpose photos and publish them",
+  "description": "This project is about implementing a social network that unable users to superimpose photos and publish them",
   "main": "index.js",
   "repository": "https://gitlab.com/Projet-42/specialization/camagru",
   "author": "nabitbol",
   "license": "MIT",
   "private": "true",
   "scripts": {
-    "backend": "yarn workspace @camagru/backend start",
+    "backend--dev": "yarn workspace @camagru/backend start",
     "backend--watch": "yarn workspace @camagru/backend start--watch",
-    "frontend": "yarn workspace @camagru/frontend dev",
+    "frontend--dev": "yarn workspace @camagru/frontend dev",
     "lint": "eslint"
   },
   "workspaces": [
