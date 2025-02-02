@@ -1,4 +1,5 @@
-button, a button {
+button,
+a button {
   border: none;
   padding: 5px 10px;
   font-weight: bold;
@@ -10,6 +11,6 @@ button, a button {
 }
 
 button.primary {
-  background-color: #4bb4f8;
-  color: #ffffff;
+  background-color: var(--button-primary-background-color);
+  color: var(--button-primary-background-color);
 }

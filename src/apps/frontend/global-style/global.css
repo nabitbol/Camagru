@@ -1,4 +1,17 @@
-*, *::before, *::after {
+:root {
+  --error-text-color: #ff8484;
+
+  --input-background-color: rgb(255, 255, 255);
+  --input-border-color: #ededed;
+  --input-button-hover-color: gray;
+
+  --button-primary-background-color: #4bb4f8;
+  --button-primary-text-color: #ffffff;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
