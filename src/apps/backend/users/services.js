@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import * as argon2 from "argon2";
 import { transporter, backendBaseUrl, backendPort } from "../config.js";
 import UserDataAccess from "./data-access.js";
+import { MyError, ErrorType} from '../errors/index.js'
 
 //TODO add error handling
 //TODO input verification
@@ -29,7 +30,7 @@ const UserServices = (userDataAccess) => {
       return hash;
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new Error("Couldn't hash string");
+      throw new MyError("Couldn't hash string", ErrorType.USER_UPDATE);
     }
   };
 
@@ -39,7 +40,7 @@ const UserServices = (userDataAccess) => {
       return existingUser ? true : false;
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new Error("Couldn't get user from email");
+      throw new MyError("Couldn't get user from email", ErrorType.USER_NOT_FOUND);
     }
   };
 
@@ -52,7 +53,7 @@ const UserServices = (userDataAccess) => {
       await userDataAccess.addUser(userData);
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new Error("Couldn't addd user");
+      throw new MyError("Couldn't addd user", ErrorType.USER_INSERTION);
     }
   };
 
@@ -69,7 +70,7 @@ const UserServices = (userDataAccess) => {
       console.log("Message sent: %s", info.messageId);
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new Error("Couldn't send verification e-mail");
+      throw new MyError("Couldn't send verification e-mail", ErrorType.EMAIL_NOT_SENT);
     }
   };
 
@@ -78,7 +79,7 @@ const UserServices = (userDataAccess) => {
       const userData = await userDataAccess.getUserFromToken(token);
       if (!userData) {
         console.log(`Error: ${err.message}`);
-        throw new Error("User not found");
+        throw new MyError("User not found", ErrorType.USER_NOT_FOUND);
       }
       return userData;
     } catch (err) {
@@ -94,7 +95,7 @@ const UserServices = (userDataAccess) => {
       });
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new Error("Couldn't update user data");
+      throw new MyError("Couldn't update user data", ErrorType.USER_UPDATE);
     }
   };
 

@@ -1,12 +1,6 @@
 import { HttpResponseHandler } from "@camagru/http-response";
-import {
-  httpDefaultError,
-  httpErrorEmailAlreadyUsed,
-  httpErrorEmailNotSent,
-  httpErrorUserInsertion,
-  httpErrorUserNotFound,
-  httpErrorUserUpdate,
-} from "../http-responses.js";
+import { MyError, ErrorType, errors } from '../errors/index.js'
+
 
 const UserControllers = (userServices) => {
   const signUp = async (req, res) => {
@@ -14,15 +8,22 @@ const UserControllers = (userServices) => {
     const { email, username, password } = req.body;
 
     try {
-      if (await userServices.isExisitingUser(email))
-        throw new Error("Email already in use");
+
+      if (await userServices.isExisitingUser(email)) {
+        console.log(ErrorType.EMAIL_ALREADY_IN_USE);
+        throw new MyError("Email already in use", ErrorType.EMAIL_ALREADY_IN_USE);
+      }
+
       const verificationToken = userServices.getVerificationToken();
+
       await userServices.sendVerificationEmail(
         email,
         username,
         verificationToken
       );
+
       const hash = await userServices.hashString(password);
+
       await userServices.addUser({
         email: email,
         username: username,
@@ -30,6 +31,7 @@ const UserControllers = (userServices) => {
         email_verification_token: verificationToken,
         email_verified: false,
       });
+
       response
         .status(201)
         .header("Content-Type", "application/json")
@@ -37,21 +39,19 @@ const UserControllers = (userServices) => {
           content: "Signed up successfully",
         })
         .send();
+
     } catch (err) {
-      switch (err.message) {
-        case "Email already in use":
-          httpErrorEmailAlreadyUsed(response, err);
-          break;
-        case "Couldn't send verification e-mail":
-          httpErrorEmailNotSent(response, err);
-          break;
-        case "Couldn't addd user":
-          httpErrorUserInsertion(response, err);
-          break;
-        default:
-          httpDefaultError(response, err);
+
+      console.log(err.message);
+
+      if (err instanceof MyError) {
+        errors[err.errorType](response, err);
+      } else {
+        errors[ErrorType.DEFAULT_ERROR](response, err);
       }
+
     }
+
   };
 
   const verifyUser = async (req, res) => {
@@ -60,7 +60,9 @@ const UserControllers = (userServices) => {
 
     try {
       const userData = await userServices.getUserFromToken(token);
+
       await userServices.updateUserVerifiedStatus(userData);
+
       response
         .status(202)
         .header("Content-Type", "application/json")
@@ -68,18 +70,19 @@ const UserControllers = (userServices) => {
           content: "User verified successfully",
         })
         .send();
+
     } catch (err) {
-      switch (err.message) {
-        case "User not found":
-          httpErrorUserNotFound(response, err);
-          break;
-        case "Couldn't update user data":
-          httpErrorUserUpdate(response, err);
-          break;
-        default:
-          httpDefaultError(response, err);
+
+      console.log(err.message);
+
+      if (err instanceof MyError) {
+        errors[err.errorType](response, err);
+      } else {
+        errors[ErrorType.DEFAULT_ERROR](response, err);
       }
+
     }
+
   };
   return {
     signUp,
