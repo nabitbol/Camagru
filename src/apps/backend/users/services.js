@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import * as argon2 from "argon2";
 import { transporter, backendBaseUrl, backendPort } from "../config.js";
 import UserDataAccess from "./data-access.js";
-import { MyError, ErrorType} from '../errors/index.js'
+import { MyError, errors} from '../errors/index.js'
 
 //TODO add error handling
 //TODO input verification
@@ -30,7 +30,7 @@ const UserServices = (userDataAccess) => {
       return hash;
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't hash string", ErrorType.USER_UPDATE);
+      throw new MyError("Couldn't hash string", errors.USER_UPDATE);
     }
   };
 
@@ -40,7 +40,7 @@ const UserServices = (userDataAccess) => {
       return existingUser ? true : false;
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't get user from email", ErrorType.USER_NOT_FOUND);
+      throw new MyError("Couldn't get user from email", errors.USER_NOT_FOUND);
     }
   };
 
@@ -53,7 +53,7 @@ const UserServices = (userDataAccess) => {
       await userDataAccess.addUser(userData);
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't addd user", ErrorType.USER_INSERTION);
+      throw new MyError("Couldn't addd user", errors.USER_INSERTION);
     }
   };
 
@@ -70,7 +70,7 @@ const UserServices = (userDataAccess) => {
       console.log("Message sent: %s", info.messageId);
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't send verification e-mail", ErrorType.EMAIL_NOT_SENT);
+      throw new MyError("Couldn't send verification e-mail", errors.EMAIL_NOT_SENT);
     }
   };
 
@@ -79,7 +79,7 @@ const UserServices = (userDataAccess) => {
       const userData = await userDataAccess.getUserFromToken(token);
       if (!userData) {
         console.log(`Error: ${err.message}`);
-        throw new MyError("User not found", ErrorType.USER_NOT_FOUND);
+        throw new MyError("User not found", errors.USER_NOT_FOUND);
       }
       return userData;
     } catch (err) {
@@ -95,7 +95,7 @@ const UserServices = (userDataAccess) => {
       });
     } catch (err) {
       console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't update user data", ErrorType.USER_UPDATE);
+      throw new MyError("Couldn't update user data", errors.USER_UPDATE);
     }
   };
 

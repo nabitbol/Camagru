@@ -1,5 +1,5 @@
 import { HttpResponseHandler } from "@camagru/http-response";
-import { MyError, ErrorType, errors } from '../errors/index.js'
+import { MyError, errors } from '../errors/index.js'
 
 
 const UserControllers = (userServices) => {
@@ -10,8 +10,7 @@ const UserControllers = (userServices) => {
     try {
 
       if (await userServices.isExisitingUser(email)) {
-        console.log(ErrorType.EMAIL_ALREADY_IN_USE);
-        throw new MyError("Email already in use", ErrorType.EMAIL_ALREADY_IN_USE);
+        throw new MyError("Email already in use", errors.EMAIL_ALREADY_IN_USE);
       }
 
       const verificationToken = userServices.getVerificationToken();
@@ -45,9 +44,9 @@ const UserControllers = (userServices) => {
       console.log(err.message);
 
       if (err instanceof MyError) {
-        errors[err.errorType](response, err);
+        err.responseHandler(response, err);
       } else {
-        errors[ErrorType.DEFAULT_ERROR](response, err);
+        errors.DEFAULT_ERROR(response, err);
       }
 
     }
@@ -73,12 +72,10 @@ const UserControllers = (userServices) => {
 
     } catch (err) {
 
-      console.log(err.message);
-
       if (err instanceof MyError) {
-        errors[err.errorType](response, err);
+        err.responseHandler(response, err);
       } else {
-        errors[ErrorType.DEFAULT_ERROR](response, err);
+        errors.DEFAULT_ERROR(response, err);
       }
 
     }
