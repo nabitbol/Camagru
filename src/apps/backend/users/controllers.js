@@ -1,6 +1,6 @@
 import { HttpResponseBuilder, HttpResponseHandler } from "@camagru/http-response";
 import { MyError, errors } from '../errors/index.js'
-import { logger, logLevel } from "@camagru/logger";
+import { logger, logLevels } from "@camagru/logger";
 
 
 const UserControllers = (userServices) => {
@@ -53,7 +53,7 @@ const UserControllers = (userServices) => {
       }
 
       logger.log({
-        level: logLevel.ERROR,
+        level: logLevels.ERROR,
         message: err.message
       });
 
@@ -90,7 +90,7 @@ const UserControllers = (userServices) => {
       }
 
       logger.log({
-        level: logLevel.ERROR,
+        level: logLevels.ERROR,
         message: err.message
       });
     }

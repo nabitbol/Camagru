@@ -1,8 +1,8 @@
 import { Logger, logger } from "./logger.js";
-import { logLevel } from "./levels.js";
+import { logLevels } from "./Enums.js";
 
 export {
     Logger,
     logger,
-    logLevel
+    logLevels
 }

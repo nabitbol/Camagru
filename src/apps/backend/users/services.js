@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import * as argon2 from "argon2";
 import { transporter, backendBaseUrl, backendPort } from "../config.js";
 import { MyError, errors } from '../errors/index.js';
-import { logger, logLevel } from '@camagru/logger';
+import { logger, logLevels } from '@camagru/logger';
 
 
 //TODO add error handling
@@ -52,7 +52,7 @@ const UserServices = (userDataAccess) => {
       await userDataAccess.addUser(userData);
 
       logger.log({
-        level: logLevel.INFO,
+        level: logLevels.INFO,
         message: "User added successufully",
       });
 
@@ -73,7 +73,7 @@ const UserServices = (userDataAccess) => {
       );
 
       logger.log({
-        level: logLevel.INFO,
+        level: logLevels.INFO,
         message: `Message sent: ${info.messageId}`,
       });
 

@@ -1,9 +1,26 @@
+import { transports } from "./Enums.js";
+import { config } from "./config.js";
+
 class Logger {
-    constructor() {
+    constructor(config) {
         this.logs = [];
         this.level = "";
         this.timestamp = "";
         this.message = "";
+        this.transports = config.TRANSPORT_TYPES;
+        this.file = config.FILE_NAME;
+    }
+
+    #outputLogs = () => {
+        this.transports.forEach(currTransport => {
+            transports[currTransport](
+                this.logs,
+                this.timestamp,
+                this.level,
+                this.message,
+                this.file
+            )
+        });
     }
 
     log = ({ level, message }) => {
@@ -12,16 +29,17 @@ class Logger {
 
         this.logs.push(serverLog);
         this.timestamp = now.timestamp;
+        this.level = level;
         this.message = message;
 
-        console.log(serverLog);
+        this.#outputLogs()
     }
 }
 
 
-const logger = new Logger();
+const logger = new Logger(config);
 
 export {
-    logger,
-    Logger
+    Logger,
+    logger
 }

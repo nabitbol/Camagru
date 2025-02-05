@@ -1,5 +1,5 @@
 import http from "http";
-import { logger, logLevel } from '@camagru/logger';
+import { logger, logLevels } from '@camagru/logger';
 
 const defaultHealthCheck = (req, res) => {
   if (req.url === "/health") {
@@ -38,7 +38,7 @@ const Server = class {
     const logMessage = `Application is running on http://${hostToUse}:${port}`;
 
     this.server.listen(portToUse, hostToUse, () => {
-      logger.log({ level: logLevel.INFO, message: logMessage });
+      logger.log({ level: logLevels.INFO, message: logMessage });
     });
   }
 
