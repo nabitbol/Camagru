@@ -1,0 +1,10 @@
+{
+  "name": "@camagru/logger",
+  "version": "1.0.0",
+  "description": "A simple logger for Camagru services",
+  "main": "index.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT",
+  "private": true
+}

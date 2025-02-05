@@ -1,65 +1,41 @@
 /* ------------------------------- User errors ------------------------------ */
 
-const httpErrorEmailAlreadyUsed = (response, error) => {
-  response
-    .status(409)
-    .header("Content-Type", "application/json")
-    .body({
-      message: error.message,
-    })
-    .send();
+const httpErrorEmailAlreadyUsed = {
+  status: 409,
+  message: "Email already in use",
+  header: ["Content-Type", "application/json"]
+}
+
+const httpErrorUserInsertion = {
+  status: 500,
+  message: "Couldn't addd user",
+  header: ["Content-Type", "application/json"]
 };
 
-const httpErrorUserInsertion = (response, error) => {
-  response
-    .status(500)
-    .header("Content-Type", "application/json")
-    .body({
-      message: error.message,
-    })
-    .send();
+
+const httpErrorUserUpdate = {
+  status: 500,
+  message: "Couldn't update user data",
+  header: ["Content-Type", "application/json"]
 };
 
-const httpErrorUserUpdate = (response, error) => {
-  response
-    .status(500)
-    .header("Content-Type", "application/json")
-    .body({
-      message: error.message,
-    })
-    .send();
+const httpErrorUserNotFound = {
+  status: 404,
+  message: "Couldn't get user from email",
+  header: ["Content-Type", "application/json"]
 };
 
-const httpErrorUserNotFound = (response, error) => {
-  response
-    .status(404)
-    .header("Content-Type", "application/json")
-    .body({
-      message: error.message,
-    })
-    .send();
-};
-
-const httpErrorEmailNotSent = (response, error) => {
-  response
-    .status(502)
-    .header("Content-Type", "application/json")
-    .body({
-      message: error.message,
-    })
-    .send();
+const httpErrorEmailNotSent = {
+  status: 502,
+  message: "Couldn't send verification e-mail",
+  header: ["Content-Type", "application/json"]
 };
 
 /* ------------------------------ Shared errors ----------------------------- */
 
-const httpDefaultError = (response, error) => {
-  response
-    .status(500)
-    .header("Content-Type", "application/json")
-    .body({
-      message: error.message,
-    })
-    .send();
+const httpDefaultError = {
+  status: 500,
+  header: ["Content-Type", "application/json"]
 };
 
 export {

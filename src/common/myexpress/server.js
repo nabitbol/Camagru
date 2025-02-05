@@ -1,4 +1,5 @@
 import http from "http";
+import { logger, logLevel } from '@camagru/logger';
 
 const defaultHealthCheck = (req, res) => {
   if (req.url === "/health") {
@@ -34,9 +35,10 @@ const Server = class {
   listen(port, host) {
     const portToUse = port || 3000;
     const hostToUse = host || "localhost";
+    const logMessage = `Application is running on http://${hostToUse}:${port}`;
 
     this.server.listen(portToUse, hostToUse, () => {
-      console.log(`server runing on http://${hostToUse}:${portToUse}`);
+      logger.log({ level: logLevel.INFO, message: logMessage });
     });
   }
 
@@ -45,7 +47,9 @@ const Server = class {
     const reqUrlRessources = req.url.split("/");
     let params = {};
 
-    if (reqUrlRessources.length != pathRessources.length) return false;
+    if (reqUrlRessources.length != pathRessources.length) {
+      return false;
+    }
     for (let i = 0; i < reqUrlRessources.length; i++) {
       if (pathRessources[i][0] == ":") {
         const param = pathRessources[i].slice(1);

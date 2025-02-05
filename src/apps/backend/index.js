@@ -3,7 +3,9 @@ import QueryBuilder from "@camagru/query-builder";
 import UserDataAccess from "./users/data-access.js";
 import UserControllers from "./users/controllers.js";
 import UserServices from "./users/services.js";
+import { logger, logLevel } from "@camagru/logger";
 import { pgConfig } from "./config.js";
+
 
 const simpleTest = (req, res) => {
   console.log("test");
@@ -28,7 +30,7 @@ const main = () => {
   app.listen(port, host);
   app.get("/test", simpleTest, simpleText);
   app.post("/signup", userControllers.signUp);
-  app.post("/signup/verify-email/:id", userControllers.verifyUser);
+  app.get("/signup/verify-email/:id", userControllers.verifyUser);
 };
 
 main();

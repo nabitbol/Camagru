@@ -1,16 +1,17 @@
-import { HttpResponseHandler } from "@camagru/http-response";
+import { HttpResponseBuilder, HttpResponseHandler } from "@camagru/http-response";
 import { MyError, errors } from '../errors/index.js'
+import { logger, logLevel } from "@camagru/logger";
 
 
 const UserControllers = (userServices) => {
   const signUp = async (req, res) => {
-    const response = new HttpResponseHandler(res);
+    const response = new HttpResponseBuilder(res);
     const { email, username, password } = req.body;
 
     try {
 
       if (await userServices.isExisitingUser(email)) {
-        throw new MyError("Email already in use", errors.EMAIL_ALREADY_IN_USE);
+        throw new MyError(errors.EMAIL_ALREADY_IN_USE);
       }
 
       const verificationToken = userServices.getVerificationToken();
@@ -35,26 +36,33 @@ const UserControllers = (userServices) => {
         .status(201)
         .header("Content-Type", "application/json")
         .body({
-          content: "Signed up successfully",
+          content: "User signed up successfully",
         })
         .send();
 
     } catch (err) {
 
-      console.log(err.message);
 
       if (err instanceof MyError) {
-        err.responseHandler(response, err);
+        HttpResponseHandler(response, err);
       } else {
-        errors.DEFAULT_ERROR(response, err);
+        HttpResponseHandler(response, {
+          ...errors.DEFAULT_ERROR,
+          message: err.message
+        });
       }
+
+      logger.log({
+        level: logLevel.ERROR,
+        message: err.message
+      });
 
     }
 
   };
 
   const verifyUser = async (req, res) => {
-    const response = new HttpResponseHandler(res);
+    const response = new HttpResponseBuilder(res);
     const token = req.params.id;
 
     try {
@@ -73,11 +81,18 @@ const UserControllers = (userServices) => {
     } catch (err) {
 
       if (err instanceof MyError) {
-        err.responseHandler(response, err);
+        HttpResponseHandler(response, err);
       } else {
-        errors.DEFAULT_ERROR(response, err);
+        HttpResponseHandler(response, {
+          ...errors.DEFAULT_ERROR,
+          message: err.message
+        });
       }
 
+      logger.log({
+        level: logLevel.ERROR,
+        message: err.message
+      });
     }
 
   };

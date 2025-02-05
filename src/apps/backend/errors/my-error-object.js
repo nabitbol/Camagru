@@ -3,23 +3,12 @@
 */
 
 class MyError extends Error {
-    constructor(message, error) {
-      super(message);
-      this.responseHandler = error;
-    }
-  };
-  
-/*
-** Example of MyError object usage:
-** 
-** try {
-**  Your statements
-**  const customError = new MyError('DEFAULT_ERROR',  errors.DEFAULT_ERROR);
-** }
-** catch (err) {
-**  err.responseHandler(response, err);
-** }
-*/
+  constructor({ message, status, header }) {
+    super(message);
+    this.status = status;
+    this.header = header;
+
+  }
+};
 
 export default MyError;
-  
