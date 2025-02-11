@@ -4,26 +4,21 @@ import { logger, logLevels } from "@camagru/logger";
 
 
 const UserControllers = (userServices) => {
-  const signUp = async (req, res) => {
+  const signUp = async (req, res, next) => {
     const response = new HttpResponseBuilder(res);
     const { email, username, password } = req.body;
 
     try {
 
+      //move business log to service and keep the data format and validation in service
       if (await userServices.isExisitingUser(email)) {
         throw new MyError(errors.EMAIL_ALREADY_IN_USE);
       }
 
       const verificationToken = userServices.getVerificationToken();
-
-      await userServices.sendVerificationEmail(
-        email,
-        username,
-        verificationToken
-      );
-
+      
       const hash = await userServices.hashString(password);
-
+      
       await userServices.addUser({
         email: email,
         username: username,
@@ -32,6 +27,12 @@ const UserControllers = (userServices) => {
         email_verified: false,
       });
 
+      await userServices.sendVerificationEmail(
+        email,
+        username,
+        verificationToken
+      );
+      
       response
         .status(201)
         .header("Content-Type", "application/json")
@@ -61,7 +62,7 @@ const UserControllers = (userServices) => {
 
   };
 
-  const verifyUser = async (req, res) => {
+  const verifyUser = async (req, res, next) => {
     const response = new HttpResponseBuilder(res);
     const token = req.params.id;
 

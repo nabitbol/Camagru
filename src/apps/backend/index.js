@@ -7,11 +7,12 @@ import { logger, logLevels } from "@camagru/logger";
 import { pgConfig } from "./config.js";
 
 
-const simpleTest = (req, res) => {
+const simpleTest = (req, res, next) => {
   console.log("test");
+  next();
 };
 
-const simpleText = (req, res) => {
+const simpleText = (req, res, next) => {
   res.writeHead(200, { "Content-type": "text/plain" });
   res.end("toto");
 };
