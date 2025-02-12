@@ -43,31 +43,30 @@ const Server = class {
         } catch (err) {
             logger.log({ level: logLevels.ERROR, message: err.message });
         }
-  }
+    }
 
     // Factory to create the function that invokes the next middleware.
     #createNext(req, res, handlerList) {
         let currentHandlerItem = handlerList.head;
-        const errorMessage = "Request  undefined.";
+        const errorMessage = "Next middleware undefined.";
 
 
         const next = function () {
             try {
                 if (req, res, currentHandlerItem) {
-                    const handlerItemToCall = currentHandlerItem;
 
                     if (currentHandlerItem.next)
                         currentHandlerItem = currentHandlerItem.next;
 
-                    handlerItemToCall.data(req, res, next);
+                    currentHandlerItem.data(req, res, next);
 
                     return;
                 } else {
-                    throw new ERROR();
+                    throw new ERROR(errorMessage);
                 }
 
             } catch (err) {
-                logger.log({ level: logLevels.ERROR, message: errorMessage });
+                logger.log({ level: logLevels.ERROR, message: err.message });
             }
         }
         return next;
