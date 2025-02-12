@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import * as argon2 from "argon2";
-import { transporter, backendBaseUrl, backendPort } from "../config.js";
+import { transporter, BACKEND_BASE_URL, BACKEND_PORT } from "../config.js";
 import { MyError, errors } from '../errors/index.js';
 import { logger, logLevels } from '@camagru/logger';
 
@@ -19,7 +19,7 @@ To verify your account please on the link below: ${verificationToken}`,
     html: `<h1>Welcome ${username}!</h1> \
 <p>We are thrille to count you in.</p>\
 <p>To verify your account please on the link below:</p>\
-<a href="${backendBaseUrl}:${backendPort}/sign-up/verify-email/${verificationToken}">link to \
+<a href="${BACKEND_BASE_URL}:${BACKEND_PORT}/sign-up/verify-email/${verificationToken}">link to \
 validate your account </a>`,
   };
 };
