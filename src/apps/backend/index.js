@@ -3,7 +3,6 @@ import QueryBuilder from "@camagru/query-builder";
 import UserDataAccess from "./users/data-access.js";
 import UserControllers from "./users/controllers.js";
 import UserServices from "./users/services.js";
-import { logger, logLevels } from "@camagru/logger";
 import { pgConfig } from "./config.js";
 
 
