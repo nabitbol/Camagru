@@ -1,11 +1,16 @@
 import crypto from "node:crypto";
 import * as argon2 from "argon2";
-import { transporter, backendBaseUrl, backendPort } from "../config.js";
-import UserDataAccess from "./data-access.js";
-import { MyError, errors} from '../errors/index.js'
+import { transporter, BACKEND_BASE_URL, BACKEND_PORT } from "../config.js";
+import { MyError, errors } from '../errors/index.js';
+import { logger, logLevels } from '@camagru/logger';
+
 
 //TODO add error handling
 //TODO input verification
+
+/* -------------------------------------------------------------------------- */
+/*                                    tools                                   */
+/* -------------------------------------------------------------------------- */
 
 const getVerifyEmailContent = (userEmail, username, verificationToken) => {
   //Swape from email to env variable
@@ -18,7 +23,7 @@ To verify your account please on the link below: ${verificationToken}`,
     html: `<h1>Welcome ${username}!</h1> \
 <p>We are thrille to count you in.</p>\
 <p>To verify your account please on the link below:</p>\
-<a href="${backendBaseUrl}:${backendPort}/verify/${verificationToken}">link to \
+<a href="${BACKEND_BASE_URL}:${BACKEND_PORT}/sign-up/verify-email/${verificationToken}">link to \
 validate your account </a>`,
   };
 };
@@ -29,8 +34,7 @@ const UserServices = (userDataAccess) => {
       const hash = await argon2.hash(toHash);
       return hash;
     } catch (err) {
-      console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't hash string", errors.USER_UPDATE);
+      throw new MyError(errors.USER_UPDATE);
     }
   };
 
@@ -39,8 +43,7 @@ const UserServices = (userDataAccess) => {
       const existingUser = await userDataAccess.getUserFromEmail({ email });
       return existingUser ? true : false;
     } catch (err) {
-      console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't get user from email", errors.USER_NOT_FOUND);
+      throw new MyError(errors.USER_NOT_FOUND);
     }
   };
 
@@ -51,9 +54,14 @@ const UserServices = (userDataAccess) => {
   const addUser = async (userData) => {
     try {
       await userDataAccess.addUser(userData);
+
+      logger.log({
+        level: logLevels.INFO,
+        message: "User added successufully",
+      });
+
     } catch (err) {
-      console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't addd user", errors.USER_INSERTION);
+      throw new MyError(errors.USER_INSERTION);
     }
   };
 
@@ -63,14 +71,18 @@ const UserServices = (userDataAccess) => {
     verificationToken
   ) => {
     try {
+
       const info = await transporter.sendMail(
         getVerifyEmailContent(userEmail, username, verificationToken)
       );
 
-      console.log("Message sent: %s", info.messageId);
+      logger.log({
+        level: logLevels.INFO,
+        message: `Message sent: ${info.messageId}`,
+      });
+
     } catch (err) {
-      console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't send verification e-mail", errors.EMAIL_NOT_SENT);
+      throw new MyError(errors.EMAIL_NOT_SENT);
     }
   };
 
@@ -78,8 +90,7 @@ const UserServices = (userDataAccess) => {
     try {
       const userData = await userDataAccess.getUserFromToken(token);
       if (!userData) {
-        console.log(`Error: ${err.message}`);
-        throw new MyError("User not found", errors.USER_NOT_FOUND);
+        throw new MyError(errors.USER_NOT_FOUND);
       }
       return userData;
     } catch (err) {
@@ -94,19 +105,65 @@ const UserServices = (userDataAccess) => {
         email_verification_token: null,
       });
     } catch (err) {
-      console.log(`Error: ${err.message}`);
-      throw new MyError("Couldn't update user data", errors.USER_UPDATE);
+      throw new MyError(errors.USER_UPDATE);
     }
   };
 
+  /* -------------------------------------------------------------------------- */
+  /*                                main services                               */
+  /* -------------------------------------------------------------------------- */
+
+  const signUp = async (email, username, password, response) => {
+    //move business log to service and keep the data format and validation in service
+    if (await userServices.isExisitingUser(email)) {
+      throw new MyError(errors.EMAIL_ALREADY_IN_USE);
+    }
+
+    const verificationToken = userServices.getVerificationToken();
+
+    const hash = await userServices.hashString(password);
+
+    await userServices.addUser({
+      email: email,
+      username: username,
+      pass: hash,
+      email_verification_token: verificationToken,
+      email_verified: false,
+    });
+
+    await userServices.sendVerificationEmail(
+      email,
+      username,
+      verificationToken
+    );
+
+    response
+      .status(201)
+      .header("Content-Type", "application/json")
+      .body({
+        content: "User signed up successfully",
+      })
+      .send();
+  };
+
+
+  const verifyUser = async (token, response) => {
+    const userData = await userServices.getUserFromToken(token);
+
+    await userServices.updateUserVerifiedStatus(userData);
+
+    response
+      .status(202)
+      .header("Content-Type", "application/json")
+      .body({
+        content: "User verified successfully",
+      })
+      .send();
+
+  }
   return {
-    addUser,
-    isExisitingUser,
-    getVerificationToken,
-    sendVerificationEmail,
-    hashString,
-    getUserFromToken,
-    updateUserVerifiedStatus,
+    signUp,
+    verifyUser
   };
 };
 

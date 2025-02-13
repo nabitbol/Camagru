@@ -1,12 +1,4 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: `${__dirname}/../../.env` });
 
 /* -------------------------------------------------------------------------- */
 /*                                  config db                                 */
@@ -39,9 +31,9 @@ const transporter = nodemailer.createTransport({
 /*                                  Web info                                  */
 /* -------------------------------------------------------------------------- */
 
-const backendBaseUrl = process.env.BACKEND_BASE_URL;
-const backendPort = process.env.BACKEND_PORT;
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
+const BACKEND_PORT = process.env.BACKEND_PORT;
 
 /* -------------------------------------------------------------------------- */
 
-export { pgConfig, transporter, backendBaseUrl, backendPort };
+export { pgConfig, transporter, BACKEND_BASE_URL, BACKEND_PORT };

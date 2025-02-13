@@ -1,83 +1,57 @@
-import { HttpResponseHandler } from "@camagru/http-response";
+import { HttpResponseBuilder, HttpResponseHandler } from "@camagru/http-response";
 import { MyError, errors } from '../errors/index.js'
+import { logger, logLevels } from "@camagru/logger";
 
 
 const UserControllers = (userServices) => {
-  const signUp = async (req, res) => {
-    const response = new HttpResponseHandler(res);
+  const signUp = async (req, res, next) => {
+    const response = new HttpResponseBuilder(res);
     const { email, username, password } = req.body;
 
     try {
-
-      if (await userServices.isExisitingUser(email)) {
-        throw new MyError("Email already in use", errors.EMAIL_ALREADY_IN_USE);
-      }
-
-      const verificationToken = userServices.getVerificationToken();
-
-      await userServices.sendVerificationEmail(
-        email,
-        username,
-        verificationToken
-      );
-
-      const hash = await userServices.hashString(password);
-
-      await userServices.addUser({
-        email: email,
-        username: username,
-        pass: hash,
-        email_verification_token: verificationToken,
-        email_verified: false,
-      });
-
-      response
-        .status(201)
-        .header("Content-Type", "application/json")
-        .body({
-          content: "Signed up successfully",
-        })
-        .send();
-
+      userServices.signUp(email, username, password, response);
     } catch (err) {
 
-      console.log(err.message);
 
       if (err instanceof MyError) {
-        err.responseHandler(response, err);
+        HttpResponseHandler(response, err);
       } else {
-        errors.DEFAULT_ERROR(response, err);
+        HttpResponseHandler(response, {
+          ...errors.DEFAULT_ERROR,
+          message: err.message
+        });
       }
+
+      logger.log({
+        level: logLevels.ERROR,
+        message: err.message
+      });
 
     }
 
   };
 
-  const verifyUser = async (req, res) => {
-    const response = new HttpResponseHandler(res);
+  const verifyUser = async (req, res, next) => {
+    const response = new HttpResponseBuilder(res);
     const token = req.params.id;
 
     try {
-      const userData = await userServices.getUserFromToken(token);
-
-      await userServices.updateUserVerifiedStatus(userData);
-
-      response
-        .status(202)
-        .header("Content-Type", "application/json")
-        .body({
-          content: "User verified successfully",
-        })
-        .send();
-
+      userServices.verifyUser(token, response);
     } catch (err) {
 
       if (err instanceof MyError) {
-        err.responseHandler(response, err);
+        HttpResponseHandler(response, err);
       } else {
-        errors.DEFAULT_ERROR(response, err);
+        HttpResponseHandler(response, {
+          ...errors.DEFAULT_ERROR,
+          message: err.message
+        });
       }
 
+      logger.log({
+        level: logLevels.ERROR,
+        message: err.message
+      });
     }
 
   };
