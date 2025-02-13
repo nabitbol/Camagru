@@ -1,6 +1,8 @@
 import MyExpress from "@camagru/myexpress";
+import { pgConfig } from "./config.js";
+import QueryBuilder from "@camagru/query-builder";
 
-const simpleText = (req, res) => {
+const simpleText = async (req, res) => {
   res.writeHead(200, { "Content-type": "text/plain" });
   res.end("toto");
 };
