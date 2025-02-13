@@ -1,7 +1,7 @@
 {
   "name": "camagru",
   "version": "1.0.0",
-  "description": "THis project is about implementing a social network that unable users to superimpose photos and publish them",
+  "description": "This project is about implementing a social network that unable users to superimpose photos and publish them",
   "main": "index.js",
   "repository": "https://gitlab.com/Projet-42/specialization/camagru",
   "author": "nabitbol",
@@ -11,7 +11,7 @@
     "test": "vitest",
     "backend": "yarn workspace @camagru/backend start",
     "backend--watch": "yarn workspace @camagru/backend start--watch",
-    "frontend": "yarn workspace @camagru/frontend dev",
+    "frontend--dev": "yarn workspace @camagru/frontend dev",
     "lint": "eslint"
   },
   "workspaces": [
@@ -20,11 +20,7 @@
     "tests/*"
   ],
   "devDependencies": {
-    "eslint": "^8.51.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "vitest": "^2.0.5"
+    "eslint": "^9.20.1",
+    "vitest": "^3.0.5"
   }
 }

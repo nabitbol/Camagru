@@ -1,0 +1,16 @@
+button,
+a button {
+  border: none;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  background-color: #cecece;
+  color: #000;
+  cursor: pointer;
+  width: 100%;
+}
+
+button.primary {
+  background-color: var(--button-primary-background-color);
+  color: var(--button-primary-background-color);
+}
