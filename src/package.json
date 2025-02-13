@@ -8,20 +8,19 @@
   "license": "MIT",
   "private": "true",
   "scripts": {
-    "backend--dev": "yarn workspace @camagru/backend start",
+    "test": "vitest",
+    "backend": "yarn workspace @camagru/backend start",
     "backend--watch": "yarn workspace @camagru/backend start--watch",
     "frontend--dev": "yarn workspace @camagru/frontend dev",
     "lint": "eslint"
   },
   "workspaces": [
     "apps/*",
-    "common/*"
+    "common/*",
+    "tests/*"
   ],
   "devDependencies": {
-    "eslint": "^8.51.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1"
+    "eslint": "^9.20.1",
+    "vitest": "^3.0.5"
   }
 }

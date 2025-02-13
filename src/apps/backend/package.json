@@ -11,9 +11,7 @@
     "start--watch": "nodemon index.js",
     "lint": "eslint"
   },
-  "dependencies": {
-    "@camagru/common-exemples": "1.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "nodemon": "^3.0.1"
   }
