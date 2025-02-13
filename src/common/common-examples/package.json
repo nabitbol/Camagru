@@ -1,7 +1,7 @@
 {
   "name": "@camagru/common-examples",
   "version": "1.0.0",
-  "description": "Exemples of common functions",
+  "description": "Examples of common functions",
   "main": "index.js",
   "type": "module",
   "author": "nabitbol",
