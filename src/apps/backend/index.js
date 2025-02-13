@@ -20,7 +20,7 @@ const main = () => {
   const port = BACKEND_PORT;
   const host = BACKEND_BASE_URL;
 
-  const app = MyExpress();
+  const app = new MyExpress();
 
   const queryBuilder = new QueryBuilder(pgConfig);
   const userDataAccess = UserDataAccess(queryBuilder);

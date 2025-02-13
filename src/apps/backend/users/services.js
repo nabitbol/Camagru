@@ -8,6 +8,10 @@ import { logger, logLevels } from '@camagru/logger';
 //TODO add error handling
 //TODO input verification
 
+/* -------------------------------------------------------------------------- */
+/*                                    tools                                   */
+/* -------------------------------------------------------------------------- */
+
 const getVerifyEmailContent = (userEmail, username, verificationToken) => {
   //Swape from email to env variable
   return {
@@ -105,14 +109,61 @@ const UserServices = (userDataAccess) => {
     }
   };
 
+  /* -------------------------------------------------------------------------- */
+  /*                                main services                               */
+  /* -------------------------------------------------------------------------- */
+
+  const signUp = async (email, username, password, response) => {
+    //move business log to service and keep the data format and validation in service
+    if (await userServices.isExisitingUser(email)) {
+      throw new MyError(errors.EMAIL_ALREADY_IN_USE);
+    }
+
+    const verificationToken = userServices.getVerificationToken();
+
+    const hash = await userServices.hashString(password);
+
+    await userServices.addUser({
+      email: email,
+      username: username,
+      pass: hash,
+      email_verification_token: verificationToken,
+      email_verified: false,
+    });
+
+    await userServices.sendVerificationEmail(
+      email,
+      username,
+      verificationToken
+    );
+
+    response
+      .status(201)
+      .header("Content-Type", "application/json")
+      .body({
+        content: "User signed up successfully",
+      })
+      .send();
+  };
+
+
+  const verifyUser = async (token, response) => {
+    const userData = await userServices.getUserFromToken(token);
+
+    await userServices.updateUserVerifiedStatus(userData);
+
+    response
+      .status(202)
+      .header("Content-Type", "application/json")
+      .body({
+        content: "User verified successfully",
+      })
+      .send();
+
+  }
   return {
-    addUser,
-    isExisitingUser,
-    getVerificationToken,
-    sendVerificationEmail,
-    hashString,
-    getUserFromToken,
-    updateUserVerifiedStatus,
+    signUp,
+    verifyUser
   };
 };
 

@@ -34,7 +34,6 @@ const transporter = nodemailer.createTransport({
 const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
 const BACKEND_PORT = process.env.BACKEND_PORT;
 
-console.log(BACKEND_BASE_URL, BACKEND_PORT);
 /* -------------------------------------------------------------------------- */
 
 export { pgConfig, transporter, BACKEND_BASE_URL, BACKEND_PORT };

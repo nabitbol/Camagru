@@ -9,6 +9,7 @@ const defaultHealthCheck = (req, res) => {
     }
 };
 
+
 const Server = class {
     constructor(healthCheckFunc) {
         this.server = http.createServer(
@@ -16,7 +17,6 @@ const Server = class {
         );
     }
 
-    // replace empty port and host assignment by a guarde
     listen(port, host) {
         const portHostErrorMessage = 'Port or host undefined';
 
@@ -155,9 +155,4 @@ const Server = class {
     }
 };
 
-// Remove 
-const ServerInstanciator = () => {
-    return new Server();
-};
-
-export default ServerInstanciator;
+export default Server;

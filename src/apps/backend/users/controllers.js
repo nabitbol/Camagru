@@ -9,38 +9,7 @@ const UserControllers = (userServices) => {
     const { email, username, password } = req.body;
 
     try {
-
-      //move business log to service and keep the data format and validation in service
-      if (await userServices.isExisitingUser(email)) {
-        throw new MyError(errors.EMAIL_ALREADY_IN_USE);
-      }
-
-      const verificationToken = userServices.getVerificationToken();
-      
-      const hash = await userServices.hashString(password);
-      
-      await userServices.addUser({
-        email: email,
-        username: username,
-        pass: hash,
-        email_verification_token: verificationToken,
-        email_verified: false,
-      });
-
-      await userServices.sendVerificationEmail(
-        email,
-        username,
-        verificationToken
-      );
-      
-      response
-        .status(201)
-        .header("Content-Type", "application/json")
-        .body({
-          content: "User signed up successfully",
-        })
-        .send();
-
+      userServices.signUp(email, username, password, response);
     } catch (err) {
 
 
@@ -67,18 +36,7 @@ const UserControllers = (userServices) => {
     const token = req.params.id;
 
     try {
-      const userData = await userServices.getUserFromToken(token);
-
-      await userServices.updateUserVerifiedStatus(userData);
-
-      response
-        .status(202)
-        .header("Content-Type", "application/json")
-        .body({
-          content: "User verified successfully",
-        })
-        .send();
-
+      userServices.verifyUser(token, response);
     } catch (err) {
 
       if (err instanceof MyError) {
