@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="../../global-style/main.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="../../global-scripts/main.js"></script>
+    <script src="../../global-scripts/toggle-password-visbility.js"></script>
+    <script src="main.js"></script>
+
+    <title>Sign in</title>
+  </head>
+  <body>
+    <div class="unauthenticated-layout">
+      <div class="container">
+        <h1>Sign in</h1>
+        <p id="invalid-credentials-error" class="error hidden">
+          Invalid credentials
+        </p>
+        <div class="input">
+          <label>Email address</label>
+          <input id="email" type="email" placeholder="your@email.com" />
+          <p id="email-error" class="error hidden">Invalid email address</p>
+        </div>
+        <div class="input">
+          <label>Password</label>
+          <div class="input-password">
+            <input id="password" type="password" placeholder="xxxxxxxxxxx" />
+            <button class="hidden" onClick="togglePasswordVisibility()">
+              Show
+            </button>
+          </div>
+          <p id="password-error" class="error hidden">Invalid password</p>
+          <div class="reset-password">
+            <a href="/request-password-reset/index.html">Reset password</a>
+          </div>
+        </div>
+        <button class="primary" onClick="signup()">Sign in</button>
+        <p>Powered by <a href="https://github.com/nabitbol">@nabitbol</a></p>
+      </div>
+      <div class="container">
+        <p>Don't have an account? <a href="../signup/index.html">Sign up</a></p>
+      </div>
+    </div>
+  </body>
+  <script>
+    initializePasswordVisibilityToggle();
+  </script>
+</html>

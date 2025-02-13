@@ -1,0 +1,18 @@
+{
+  "name": "@camagru/frontend",
+  "version": "1.0.0",
+  "description": "This project is about implementing a social network that unable users to superimpose photos and publish them.",
+  "main": "main.js",
+  "repository": "https://gitlab.com/Projet-42/specialization/camagru",
+  "author": "nabitbol",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.11"
+  }
+}

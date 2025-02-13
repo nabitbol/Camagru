@@ -1,0 +1,22 @@
+:root {
+  --links-font-color: #4bb4f8;
+}
+
+.reset-password {
+  text-align: right;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.reset-password a {
+  /* text-decoration: none; */
+  color: var(--links-font-color);
+}
+
+#invalid-credentials-error {
+  text-align: center;
+}
+
+p a {
+  color: var(--links-font-color);
+}

@@ -1,0 +1,39 @@
+.input {
+  display: flex;
+  flex-direction: column;
+}
+
+.input label {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.input input {
+  border: 1px solid var(--input-border-color);
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.input-password {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--input-border-color);
+  border-radius: 3px;
+}
+
+.input-password input {
+  border: 0;
+  width: 100%;
+}
+
+.input-password button {
+  border: 0;
+  width: 25%;
+  font-weight: bold;
+  background-color: var(--input-background-color);
+}
+
+.input-password button:hover {
+  cursor: pointer;
+  color: var(--input-button-hover-color);
+}
