@@ -1,25 +1,29 @@
 # Use postgres/example user/password credentials
-version: '3.9'
+version: "3.9"
 
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./src/apps/frontend:/usr/share/nginx/html:ro
+    ports:
+      - 8080:80
 
   db:
     image: postgres
     restart: always
     ports:
       - 5432:5432
-    env_file:
-      .env
+    env_file: .env
     environment:
-      POSTGRES_USER: ${DB_USER} 
+      POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     volumes:
-      - ./scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - ./src/scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8081:8080

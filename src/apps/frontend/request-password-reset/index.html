@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="../../global-style/main.css">
+  <script src="../../global-scripts/main.js"></script>
+  <script src="main.js"></script>
+
+  <title>Request password reset</title>
+</head>
+<body>
+  <div class="unauthenticated-layout">
+    <div class="container">
+      <h1>Request Password reset</h1>
+      <div class="input">
+        <label>Email address</label>
+        <input id="email" type="email" placeholder="your@email.com">
+        <p id="email-error" class="error hidden">Invalid email address</p>
+      </div>
+      <button class="primary" onClick="requestPasswordReset()">Request reset</button>
+    </div>
+  </div>
+</body>
+</html>
