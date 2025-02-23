@@ -1,3 +1,5 @@
+import { apiCall } from "../../utils/api-services";
+
 const signup = async () => {
   const email = document.querySelector('#email').value;
   const password = document.querySelector('#password').value;
@@ -23,7 +25,7 @@ const signup = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/signin', { email, password })
+    await apiCall('POST', '/signin', { email, password })
   } catch (err) {
     credentialsError.classList.remove('hidden');
     return console.error(err);

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../../global-style/main.css" />
     <script src="../../global-scripts/main.js"></script>
     <script src="../../global-scripts/toggle-password-visbility.js"></script>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
 
     <title>Sign up</title>
   </head>
@@ -29,10 +29,9 @@
           <label>Password</label>
           <div class="input-password">
             <input id="password" type="password" placeholder="xxxxxxxxxxx" />
-            <button class="hidden" onClick="togglePasswordVisibility()">
-              Show
-            </button>
+            <button id="password-button" class="hidden">Show</button>
           </div>
+          <p id="password-error" class="error hidden">Invalid password</p>
         </div>
         <div class="input">
           <label>Repeat password</label>
@@ -45,11 +44,11 @@
             Passwords do not match
           </p>
         </div>
-        <button class="primary" onClick="signup()">Sign up</button>
+        <button id="signup-button" class="primary">Sign up</button>
       </div>
     </div>
     <script>
-      initializePasswordVisibilityToggle();
+      initializePasswordVisibilityToggleListeners();
     </script>
   </body>
 </html>

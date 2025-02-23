@@ -1,0 +1,12 @@
+{
+  "name": "@camagru/http-response",
+  "version": "1.0.0",
+  "description": "This is a simple query builder that enable the user to create easily postgresql request.",
+  "main": "index.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.12.0"
+  }
+}

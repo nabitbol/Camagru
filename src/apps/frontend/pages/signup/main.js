@@ -1,3 +1,5 @@
+import * as authService from '../../utils/auth-service.js'
+
 const signup = async () => {
   const email = document.querySelector('#email').value;
   const username = document.querySelector('#username').value;
@@ -13,13 +15,14 @@ const signup = async () => {
   usernameError.classList.add('hidden');
   passwordError.classList.add('hidden');
 
-  if (document.camagru.validateEmail(email) === false) {
-    emailError.classList.remove('hidden');
-    hasErrors = true;
-  }
 
   if (document.camagru.validateUsername(username) === false) {
     usernameError.classList.remove('hidden');
+    hasErrors = true;
+  }
+
+  if (document.camagru.validateEmail(email) === false) {
+    emailError.classList.remove('hidden');
     hasErrors = true;
   }
 
@@ -36,10 +39,20 @@ const signup = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/signup', { email, username, password })
+    await authService.signup({ email, username, password })
   } catch (err) {
     return console.error(err);
   }
 
-  window.location.replace('success.html');
+  // window.location.replace('success.html');
 }
+
+/* ----------------------------- event listeners ---------------------------- */
+
+const initializeEventListeners = () => {
+  const signupButton = document.querySelector("#signup-button");
+
+  signupButton.addEventListener('click', signup)
+}
+
+initializeEventListeners();

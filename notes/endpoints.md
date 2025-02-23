@@ -30,7 +30,7 @@
 }
 ```
 
-## POST /reset-passwor/send
+## POST /reset-password/send
 
 **request body**
 ```ts

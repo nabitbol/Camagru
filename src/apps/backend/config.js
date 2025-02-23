@@ -1,11 +1,8 @@
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
+import nodemailer from "nodemailer";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: `${__dirname}/../../.env` });
+/* -------------------------------------------------------------------------- */
+/*                                  config db                                 */
+/* -------------------------------------------------------------------------- */
 
 const pgConfig = {
   user: process.env.DB_USER,
@@ -16,4 +13,28 @@ const pgConfig = {
   port: process.env.DB_PORT,
 };
 
-export { pgConfig };
+/* -------------------------------------------------------------------------- */
+/*                                 config mail                                */
+/* -------------------------------------------------------------------------- */
+
+// Use secrue:true for port 465, `false` for all other ports
+const transporter = nodemailer.createTransport({
+  host: process.env.MAIL_HOST,
+  port: process.env.MAIL_PORT,
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWORD,
+  },
+});
+
+/* -------------------------------------------------------------------------- */
+/*                                  Web info                                  */
+/* -------------------------------------------------------------------------- */
+
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
+const BACKEND_PORT = process.env.BACKEND_PORT;
+const CORS = { "Access-Control-Allow-Origin": process.env.CORS };
+
+/* -------------------------------------------------------------------------- */
+
+export { pgConfig, transporter, BACKEND_BASE_URL, BACKEND_PORT, CORS };

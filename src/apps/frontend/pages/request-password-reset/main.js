@@ -1,3 +1,5 @@
+import { apiCall } from "../../utils/api-services";
+
 const requestPasswordReset = async () => {
   const email = document.querySelector('#email').value;
   const emailError = document.querySelector('#email-error');
@@ -13,7 +15,7 @@ const requestPasswordReset = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/reset-password/send', { email });
+    await apiCall('POST', '/reset-password/send', { email });
   } catch (err) {
     return console.error(err);
   }

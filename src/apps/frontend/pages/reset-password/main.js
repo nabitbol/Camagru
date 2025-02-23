@@ -1,3 +1,5 @@
+import { apiCall } from "../../utils/api-services";
+
 const resetPassword = async () => {
   const token = (new URLSearchParams(window.location.search)).get('token');
 
@@ -23,7 +25,7 @@ const resetPassword = async () => {
   if (hasErrors) return;
 
   try {
-    await document.camagru.fetch('POST', '/reset-password/send', { password, token });
+    await apiCall('POST', '/reset-password/send', { password, token });
   } catch (err) {
     return console.error(err);
   }

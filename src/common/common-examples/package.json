@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Examples of common functions",
   "main": "index.js",
-  "type": "module",
+  "type":"module",
   "author": "nabitbol",
   "license": "MIT"
 }

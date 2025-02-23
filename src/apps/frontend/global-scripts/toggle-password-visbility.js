@@ -19,8 +19,10 @@ const togglePasswordVisibility = () => {
       : 'password';
 }
 
-const initializePasswordVisibilityToggle = () => {
+const initializePasswordVisibilityToggleListeners = () => {
   const input = document.querySelector('.input-password input');
+  const button = document.querySelector('#password-button');
 
   input.addEventListener('input', togglePasswordButtonVisibility);
+  button.addEventListener('click', togglePasswordVisibility);
 }
