@@ -2,6 +2,13 @@
 version: "3.9"
 
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./src/apps/frontend:/usr/share/nginx/html:ro
+    ports:
+      - 8080:80
+
   db:
     image: postgres
     restart: always
@@ -14,10 +21,10 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_HOST: ${DB_HOST}
     volumes:
-      - ./scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql:z
+      - ./src/scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8081:8080

@@ -1,7 +1,7 @@
 const HttpResponseHandler = (response, responseConfig) => {
     response
         .status(responseConfig.status)
-        .header(...responseConfig.header)
+        .header(responseConfig.header)
         .body({
             message: responseConfig.message,
         })

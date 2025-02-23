@@ -1,41 +1,43 @@
 /* ------------------------------- User errors ------------------------------ */
 
+const header = [{ "Content-Type": "application/json" }]
+
 const httpErrorEmailAlreadyUsed = {
   status: 409,
   message: "Email already in use",
-  header: ["Content-Type", "application/json"]
+  header
 }
 
 const httpErrorUserInsertion = {
   status: 500,
   message: "Couldn't addd user",
-  header: ["Content-Type", "application/json"]
+  header
 };
 
 
 const httpErrorUserUpdate = {
   status: 500,
   message: "Couldn't update user data",
-  header: ["Content-Type", "application/json"]
+  header
 };
 
 const httpErrorUserNotFound = {
   status: 404,
   message: "Couldn't get user from email",
-  header: ["Content-Type", "application/json"]
+  header
 };
 
 const httpErrorEmailNotSent = {
   status: 502,
   message: "Couldn't send verification e-mail",
-  header: ["Content-Type", "application/json"]
+  header
 };
 
 /* ------------------------------ Shared errors ----------------------------- */
 
 const httpDefaultError = {
   status: 500,
-  header: ["Content-Type", "application/json"]
+  header
 };
 
 export {

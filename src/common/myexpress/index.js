@@ -9,12 +9,42 @@ const defaultHealthCheck = (req, res) => {
     }
 };
 
+const HttpMethodes = {
+    GET: "GET",
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE",
+    ALL: "ALL"
+}
+
 
 const Server = class {
+    routes = {};
+    #cors;
+
     constructor(healthCheckFunc) {
+
         this.server = http.createServer(
             healthCheckFunc ? healthCheckFunc : defaultHealthCheck
         );
+
+        this.server.on("request", (req, res) => {
+            let routesUtils = [];
+            const middlewares = [];
+
+            if (this.#cors)
+                this.#setCors(res);
+
+            routesUtils = routesUtils.concat(this.#find(req.method, req.url));
+            routesUtils = routesUtils.concat(this.#find(HttpMethodes.ALL, req.url));
+
+            routesUtils.forEach(utils => {
+                req.params = utils.params;
+                middlewares.push(...utils.middlewares);
+            })
+
+            this.#addBodyRequestAndCallHandlers(req, res, middlewares)
+        })
     }
 
     listen(port, host) {
@@ -45,42 +75,77 @@ const Server = class {
         }
     }
 
-    // Factory to create the function that invokes the next middleware.
-    #createNext(req, res, handlerList) {
-        let currentHandlerItem = handlerList.head;
-        const errorMessage = "Next middleware undefined.";
+    cors(corsOptions) {
+        this.#cors = corsOptions;
+    }
+
+    #setCors(res) {
+        const [key, value] = Object.entries(this.#cors)[0];
+
+        res.setHeader(key, value);
+    }
+
+    /*
+    ** Factory to create the function that invokes the next middleware.
+    */
+    #createNext(req, res, middlewaresList) {
+        let middleware = middlewaresList.head;
 
 
-        const next = function () {
-            try {
-                if (req, res, currentHandlerItem) {
+        const next = function (err = undefined) {
 
-                    if (currentHandlerItem.next)
-                        currentHandlerItem = currentHandlerItem.next;
+            /*
+            ** To handle error properly MyExpress offer the ability to delegate the 
+            ** error handling to a dedicated middleware. To do so Within a catch block,
+            ** call the `next` function with an error object (`err`) as its argument.
+            ** This will bypass all regular middleware and invoke the first
+            ** declared error handling middleware. (thanks to this loop)
+            ** 
+            ** Catch the error and call next:
+            **   
+            **  try { // Add your code here }
+            **  catch (err) {
+            **     next(err);
+            **  }
+            **
+            **  -----------
+            **  
+            ** Call app.use to call the error middleware:
+            **
+            **  app.use ((err, req, res, next) => {
+            **      // Add your code here
+            **  })
+            */
+            while (err && middleware) {
 
-                    currentHandlerItem.data(req, res, next);
-
-                    return;
-                } else {
-                    throw new ERROR(errorMessage);
+                if (middleware.data.length === 4) {
+                    middleware.data(err, req, res, next);
                 }
 
-            } catch (err) {
-                logger.log({ level: logLevels.ERROR, message: err.message });
+                middleware = middleware.next;
+            }
+
+            if (req, res, middleware) {
+
+
+                if (middleware.next)
+                    middleware = middleware.next;
+
+
+                middleware.data(req, res, next);
+
             }
         }
         return next;
     }
 
-    #callFirstHandler(handlers, req, res) {
-        const handlerLinkedList = new LinkedList(handlers)
-        const next = this.#createNext(req, res, handlerLinkedList);
-
-        handlerLinkedList.head.data(req, res, next);
+    #callFirstMiddleware(req, res, middlewares) {
+        const middlewaresList = new LinkedList(middlewares)
+        const next = this.#createNext(req, res, middlewaresList);
+        middlewaresList.head.data(req, res, next);
     }
 
-    // add try catch to this 
-    #addBodyRequestAndCallHandlers(req, res, handlers, t) {
+    #addBodyRequestAndCallHandlers(req, res, middlewares) {
         let body = [];
 
         req
@@ -93,12 +158,15 @@ const Server = class {
             .on("end", () => {
                 const tmp = Buffer.concat(body).toString();
                 if (tmp) req.body = JSON.parse(tmp);
-                this.#callFirstHandler(handlers, req, res);
+                this.#callFirstMiddleware(req, res, middlewares);
             });
     };
 
     #getRequestParams(pathRessources, reqUrlRessources) {
         let params = {};
+
+        if (pathRessources.length < 2)
+            return;
 
         for (let i = 0; i < reqUrlRessources.length; i++) {
             if (pathRessources[i][0] == ":") {
@@ -126,33 +194,105 @@ const Server = class {
         return true;
     }
 
-    #callHandlers(method, path, handlers) {
-        this.server.on("request", (req, res) => {
-            const pathRessources = path.split("/");
-            const reqUrlRessources = req.url.split("/");
+    #find(method, url) {
+        const routes = Object.keys(this.routes[method]);
+        const splittedUrl = url.split("/");
+        let findedRoutes = [];
 
-            if (req.method === method && this.#matchRoute(pathRessources, reqUrlRessources)) {
-                req.params = this.#getRequestParams(pathRessources, reqUrlRessources);
-                this.#addBodyRequestAndCallHandlers(req, res, handlers);
+        for (let route of routes) {
+            const splittedRoute = route.split("/");
+            if (route === "@" || this.#matchRoute(splittedRoute, splittedUrl)) {
+                findedRoutes.push({
+                    middlewares: this.routes[method][route],
+                    params: this.#getRequestParams(splittedRoute, splittedUrl)
+                })
             }
-        });
+        }
+        return findedRoutes;
     }
 
-    get(path, ...handlers) {
-        this.#callHandlers("GET", path, handlers);
+    /**
+     * 
+     * @param {HttpMethodes | string} method 
+     * @param {string} routes 
+     * @param  {...(err?, req, res, next) => {}} middlewares
+     * 
+     * Used bind middleware to differents
+     * routes and types of http requests
+     */
+    #bind(method, routes, middlewares) {
+        if (this.routes[method] && this.routes[method][routes]
+            && this.routes[method][routes].length > 0) {
+
+            this.routes[method][routes]
+                = this.routes[method][routes].concat(middlewares);
+
+        } else {
+            this.routes[method] = {
+                [routes]: middlewares
+            };
+        }
     }
 
-    post(path, ...handlers) {
-        this.#callHandlers("POST", path, handlers);
+    /**
+     * 
+     * @param {string} route 
+     * @param  {...(err?, req, res, next) => {}} middlewares
+     *
+     * Bind middleware to GET http method
+     */
+    get(route, ...middlewares) {
+        this.#bind(HttpMethodes.GET, route, middlewares);
     }
 
-    put(path, ...handlers) {
-        this.#callHandlers("PUT", path, handlers);
+    /**
+     * 
+     * @param {string} route 
+     * @param  {...(err?, req, res, next) => {}} middlewares
+     *
+     * Bind middleware to POST http method
+     */
+    post(route, ...middlewares) {
+        this.#bind(HttpMethodes.POST, route, middlewares);
     }
 
-    delete(path, ...handlers) {
-        this.#callHandlers("DELETE", path, handlers);
+    /**
+    * 
+    * @param {string} route 
+    * @param  {...(err?, req, res, next) => {}} middlewares
+    *
+    * Bind middleware to PUT http method
+    */
+    put(route, ...middlewares) {
+        this.#bind(HttpMethodes.PUT, route, middlewares);
     }
+
+    /**
+    * 
+    * @param {string} route 
+    * @param  {...(err?, req, res, next) => {}} middlewares
+    *
+    * Bind middleware to DELETE http method
+    */
+    delete(route, ...middlewares) {
+        this.#bind(HttpMethodes.DELETE, route, middlewares);
+    }
+
+    /**
+    * 
+    * @param {string} route 
+    * @param  {...(err?, req, res, next) => {}} middlewares
+    *
+    * Bind middleware to be use on every http request
+    */
+    use(route, ...middlewares) {
+        if (typeof (route) === 'function') {
+            middlewares.unshift(route);
+            route = '@';
+        }
+        this.#bind(HttpMethodes.ALL, route, middlewares);
+    }
+
 };
 
 export default Server;

@@ -1,32 +1,26 @@
 import { HttpResponseBuilder, HttpResponseHandler } from "@camagru/http-response";
-import { MyError, errors } from '../errors/index.js'
-import { logger, logLevels } from "@camagru/logger";
 
 
 const UserControllers = (userServices) => {
+  const header = [{ "Content-Type": "application/json" }];
+
   const signUp = async (req, res, next) => {
     const response = new HttpResponseBuilder(res);
     const { email, username, password } = req.body;
+    const message = "User signed up successfully";
+    const status = 201;
 
     try {
-      userServices.signUp(email, username, password, response);
-    } catch (err) {
+      await userServices.signUp(email, username, password);
 
-
-      if (err instanceof MyError) {
-        HttpResponseHandler(response, err);
-      } else {
-        HttpResponseHandler(response, {
-          ...errors.DEFAULT_ERROR,
-          message: err.message
-        });
-      }
-
-      logger.log({
-        level: logLevels.ERROR,
-        message: err.message
+      HttpResponseHandler(response, {
+        header,
+        status,
+        message,
       });
 
+    } catch (err) {
+      next(err);
     }
 
   };
@@ -34,31 +28,28 @@ const UserControllers = (userServices) => {
   const verifyUser = async (req, res, next) => {
     const response = new HttpResponseBuilder(res);
     const token = req.params.id;
+    const status = 202;
+    const message = "User verified successfully";
 
     try {
-      userServices.verifyUser(token, response);
-    } catch (err) {
+      await userServices.verifyUser(token);
 
-      if (err instanceof MyError) {
-        HttpResponseHandler(response, err);
-      } else {
-        HttpResponseHandler(response, {
-          ...errors.DEFAULT_ERROR,
-          message: err.message
-        });
-      }
-
-      logger.log({
-        level: logLevels.ERROR,
-        message: err.message
+      HttpResponseHandler(response, {
+        header,
+        status,
+        message
       });
-    }
 
-  };
+    } catch (err) {
+      next(err);
+    };
+  }
+
   return {
     signUp,
     verifyUser,
   };
 };
+
 
 export default UserControllers;

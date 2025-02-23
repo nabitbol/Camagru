@@ -8,8 +8,34 @@ class HttpResponseBuilder {
     return this;
   }
 
-  header(...data) {
-    this.res.setHeader(...data);
+  /**
+   * 
+   * @param {Object} header 
+   * 
+   * Set the header on the response object.
+   */
+  #setHeader(header) {
+    const [key, value] = Object.entries(header)[0];
+
+    this.res.setHeader(key, value);
+  }
+
+  /**
+   * 
+   * @param {Object | [Object]} header 
+   * @returns pointer on the currently selected object
+   * (return this)
+   */
+  header(header) {
+    if (header instanceof Array) {
+
+      header.forEach((headerPair) => {
+        this.#setHeader(headerPair);
+      });
+
+    } else {
+      this.#setHeader(header);
+    }
     return this;
   }
 

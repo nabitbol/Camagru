@@ -1,11 +1,10 @@
 import crypto from "node:crypto";
 import * as argon2 from "argon2";
 import { transporter, BACKEND_BASE_URL, BACKEND_PORT } from "../config.js";
-import { MyError, errors } from '../errors/index.js';
+import { MyError, errors } from '../errors/index.js'
 import { logger, logLevels } from '@camagru/logger';
 
 
-//TODO add error handling
 //TODO input verification
 
 /* -------------------------------------------------------------------------- */
@@ -113,17 +112,16 @@ const UserServices = (userDataAccess) => {
   /*                                main services                               */
   /* -------------------------------------------------------------------------- */
 
-  const signUp = async (email, username, password, response) => {
-    //move business log to service and keep the data format and validation in service
-    if (await userServices.isExisitingUser(email)) {
+  const signUp = async (email, username, password) => {
+    if (await isExisitingUser(email)) {
       throw new MyError(errors.EMAIL_ALREADY_IN_USE);
     }
 
-    const verificationToken = userServices.getVerificationToken();
+    const verificationToken = getVerificationToken();
 
-    const hash = await userServices.hashString(password);
+    const hash = await hashString(password);
 
-    await userServices.addUser({
+    await addUser({
       email: email,
       username: username,
       pass: hash,
@@ -131,34 +129,17 @@ const UserServices = (userDataAccess) => {
       email_verified: false,
     });
 
-    await userServices.sendVerificationEmail(
+    await sendVerificationEmail(
       email,
       username,
       verificationToken
     );
-
-    response
-      .status(201)
-      .header("Content-Type", "application/json")
-      .body({
-        content: "User signed up successfully",
-      })
-      .send();
   };
 
+  const verifyUser = async (token) => {
+    const userData = await getUserFromToken(token);
 
-  const verifyUser = async (token, response) => {
-    const userData = await userServices.getUserFromToken(token);
-
-    await userServices.updateUserVerifiedStatus(userData);
-
-    response
-      .status(202)
-      .header("Content-Type", "application/json")
-      .body({
-        content: "User verified successfully",
-      })
-      .send();
+    await updateUserVerifiedStatus(userData);
 
   }
   return {
