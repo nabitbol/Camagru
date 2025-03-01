@@ -10,7 +10,6 @@ const UserControllers = (userServices) => {
   const signUp = async (req, res, next) => {
     const response = new HttpResponseBuilder(res);
     const { email, username, password } = req.body;
-    const message = "User signed up successfully";
     const status = 201;
 
     try {
@@ -29,7 +28,6 @@ const UserControllers = (userServices) => {
       HttpResponseHandler(response, {
         header,
         status,
-        message,
       });
 
     } catch (err) {
@@ -44,8 +42,6 @@ const UserControllers = (userServices) => {
     const response = new HttpResponseBuilder(res);
     const token = req.params.id;
     const status = 202;
-    const message = "User verified successfully";
-
 
     try {
       const jwt = await userServices.verifyUser(token);
@@ -58,7 +54,6 @@ const UserControllers = (userServices) => {
       HttpResponseHandler(response, {
         header,
         status,
-        message
       });
 
     } catch (err) {
@@ -72,7 +67,6 @@ const UserControllers = (userServices) => {
     const response = new HttpResponseBuilder(res);
     const { email, password } = req.body;
     const status = 200;
-    const message = "User signed in successfully";
 
     try {
 
@@ -95,13 +89,68 @@ const UserControllers = (userServices) => {
 
       HttpResponseHandler(response, {
         header,
-        status,
-        message
+        status
       });
 
     } catch (err) {
       next(err);
     };
+  }
+
+  /* -------------------------------------------------------------------------- */
+
+  /**
+   * 
+   * Always return a 202 (Accepted) response for password reset requests,
+   * regardless of whether the user exists.
+   * This prevents attackers from enumerating valid usernames
+   * through password reset attempts.
+   */
+  const sendResetPassword = async (req, res, next) => {
+    const response = new HttpResponseBuilder(res);
+    const { email } = req.body;
+    const status = 202;
+
+    try {
+
+      if (!email || fieldCheck.validateEmail(email) === false)
+        throw (Error("invalid email"));
+
+      await userServices.sendResetPassword(email);
+
+      HttpResponseHandler(response, {
+        header,
+        status
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  /* -------------------------------------------------------------------------- */
+
+  const verifyResetPassword = async (req, res, next) => {
+    const response = new HttpResponseBuilder(res);
+    const { password } = req.body;
+    const token = req.params.id;
+    const status = 204;
+
+    try {
+
+      if (!password || fieldCheck.validatePassword(password) === false)
+        throw (Error("invalid password"));
+
+      await userServices.verifyResetPassword(token, password);
+
+      HttpResponseHandler(response, {
+        header,
+        status
+      });
+
+    } catch (err) {
+      next(err);
+    }
   }
 
   /* -------------------------------------------------------------------------- */
@@ -138,7 +187,9 @@ const UserControllers = (userServices) => {
     signUp,
     verifyUser,
     isAuth,
-    signIn
+    signIn,
+    sendResetPassword,
+    verifyResetPassword
   };
 };
 

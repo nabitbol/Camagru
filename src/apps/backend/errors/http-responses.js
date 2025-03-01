@@ -22,7 +22,7 @@ const httpErrorUserUpdate = {
 
 const httpErrorUserNotFound = {
   status: 404,
-  message: "Couldn't get user from email",
+  message: "Couldn't get user",
   header
 };
 
