@@ -1,8 +1,10 @@
-import crypto from "node:crypto";
-import * as argon2 from "argon2";
-import { transporter, BACKEND_BASE_URL, BACKEND_PORT } from "../config.js";
+import crypto from 'node:crypto';
+import * as argon2 from 'argon2';
+import Jwt from '@camagru/myjwt';
+import { transporter, BACKEND_BASE_URL, BACKEND_PORT } from '../config.js';
 import { MyError, errors } from '../errors/index.js'
 import { logger, logLevels } from '@camagru/logger';
+import { JWT_SECRET } from '../config.js';
 
 
 //TODO input verification
@@ -141,10 +143,41 @@ const UserServices = (userDataAccess) => {
 
     await updateUserVerifiedStatus(userData);
 
+    return new Jwt().sign(userData.email, JWT_SECRET);
   }
+
+  const verifyToken = (token) => {
+    return new Jwt().verify(token, JWT_SECRET);
+  }
+
+  const signIn = async (userDataInput) => {
+    const { email } = userDataInput
+    const userData = await userDataAccess.getUserFromEmail({ email });
+
+    if (!userData)
+      throw new MyError(errors.LOGIN_INVALID_CREDENTIALS);
+
+    if (!userData.email_verified)
+      throw new MyError(errors.EMAIL_NOT_VERIFIED);
+
+    if (!await argon2.verify(userData.pass, userDataInput.password))
+      throw new MyError(errors.LOGIN_INVALID_CREDENTIALS);
+
+    const jwt = new Jwt().sign(userData.email, JWT_SECRET);
+
+    logger.log({
+      level: logLevels.INFO,
+      message: `User ${userData.id}: successfully signed in.`
+    });
+
+    return jwt;
+  }
+
   return {
     signUp,
-    verifyUser
+    verifyUser,
+    verifyToken,
+    signIn
   };
 };
 

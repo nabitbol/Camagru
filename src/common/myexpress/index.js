@@ -39,10 +39,40 @@ const Server = class {
             routesUtils = routesUtils.concat(this.#find(HttpMethodes.ALL, req.url));
 
             routesUtils.forEach(utils => {
-                req.params = utils.params;
-                middlewares.push(...utils.middlewares);
+                if (utils !== undefined) {
+                    req.params = { ...req.params, ...utils.params };
+                    middlewares.push(...utils.middlewares);
+                }
             })
 
+            /**
+             * Skips middleware execution if no middleware is found, or only an error handler is present.
+             * This avoids unnecessary error handler invocation when no preceding middleware has called 'next(err)'.
+             * Refer to Express.js error handling: https://expressjs.com/en/guide/error-handling.html
+             * 
+             * Example:
+             * 
+             * Post on /signup
+             * 
+             * If the only coded middleware is error-handling it should not be executed:
+             *
+             * app.use((err, req, res, next) => {
+             *  // your error handling code
+             * })
+             * 
+             * Or
+             * 
+             * If the only coded middleware is on /health we should not try to execute empty middlewares object
+             * 
+             * app.get('/health', (req, res, next) => {
+             *  // your helth check code
+             * })
+             * 
+             */
+            if (middlewares.length <= 0 || middlewares[0].length === 4)
+                return;
+
+            this.#addHeaderRequest(req);
             this.#addBodyRequestAndCallHandlers(req, res, middlewares)
         })
     }
@@ -145,6 +175,18 @@ const Server = class {
         middlewaresList.head.data(req, res, next);
     }
 
+    #addHeaderRequest(req) {
+        const header = {};
+
+        for (let i = 1; i < req.rawHeaders.length; i += 2) {
+            const headerName = req.rawHeaders[i - 1];
+            const headerValue = req.rawHeaders[i];
+
+            header[headerName] = headerValue;
+        }
+        req.header = header;
+    }
+
     #addBodyRequestAndCallHandlers(req, res, middlewares) {
         let body = [];
 
@@ -195,6 +237,8 @@ const Server = class {
     }
 
     #find(method, url) {
+        if (!Object.keys(this.routes).includes(method))
+            return;
         const routes = Object.keys(this.routes[method]);
         const splittedUrl = url.split("/");
         let findedRoutes = [];
@@ -227,6 +271,10 @@ const Server = class {
             this.routes[method][routes]
                 = this.routes[method][routes].concat(middlewares);
 
+        } else if (this.routes[method]) {
+            Object.assign(this.routes[method], {
+                [routes]: middlewares
+            });
         } else {
             this.routes[method] = {
                 [routes]: middlewares
