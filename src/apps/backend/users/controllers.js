@@ -47,7 +47,7 @@ const UserControllers = (userServices) => {
       const jwt = await userServices.verifyUser(token);
 
       header.push({
-        'Set-Cookie': `token=${jwt};\
+        'Set-Cookie': `auth-token=${jwt};\
         Max-Age=${tokenExperationOptions}; HttpOnly; secure`
       });
 
@@ -83,7 +83,7 @@ const UserControllers = (userServices) => {
       });
 
       header.push({
-        'Set-Cookie': `token=${jwt};\
+        'Set-Cookie': `auth-token=${jwt};\
         Max-Age=${tokenExperationOptions}; HttpOnly; secure`
       });
 
@@ -153,6 +153,28 @@ const UserControllers = (userServices) => {
     }
   }
 
+  const signOut = async (req, res, next) => {
+    const response = new HttpResponseBuilder(res);
+    const expirationDate = new Date(0)
+    const status = 200;
+
+    try {
+
+      header.push({
+        'Set-Cookie': `auth-token='';\
+        Max-Age=${expirationDate}; HttpOnly; secure`
+      });
+
+      HttpResponseHandler(response, {
+        header,
+        status
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  }
+
   /* -------------------------------------------------------------------------- */
 
   const isAuth = (req, res, next) => {
@@ -171,7 +193,7 @@ const UserControllers = (userServices) => {
         return;
       }
 
-      const token = req.header['Cookie'].split(' ')[1];
+      const token = req.header['Cookie'].split('=')[1];
       const payload = userServices.verifyToken(token);
 
       Object.assign(req.body, payload);
@@ -189,7 +211,8 @@ const UserControllers = (userServices) => {
     isAuth,
     signIn,
     sendResetPassword,
-    verifyResetPassword
+    verifyResetPassword,
+    signOut,
   };
 };
 

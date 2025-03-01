@@ -71,6 +71,8 @@ const main = () => {
   app.post("/signin", userControllers.signIn);
   app.put("/reset-password/send", userControllers.sendResetPassword);
   app.put("/reset-password/verify/:id", userControllers.verifyResetPassword);
+  app.post("/signout", userControllers.isAuth, userControllers.signOut);
+
 
   app.use(notFound);
 

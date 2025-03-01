@@ -29,7 +29,6 @@ class Jwt {
         const now = new Date();
         const expirationDate = new Date(expireAt);
 
-        console.log(expirationDate, now)
         return (expirationDate.getTime() - now.getTime()) < 0;
     }
 
