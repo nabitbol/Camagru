@@ -28,7 +28,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const getVerifyEmailContent = (userEmail, username, verificationToken) => {
-  const path = "sign-up/verify-email";
+  const path = "signup/verify-email";
 
   return {
     from: `"Camagru's team 📷" ${process.env.MAIL_USER}`,
