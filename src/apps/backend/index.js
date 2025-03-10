@@ -36,6 +36,19 @@ const error = async (err, req, res, next) => {
   });
 }
 
+const notFound = (req, res, next) => {
+  const response = new HttpResponseBuilder(res);
+  const header = [{ "Content-Type": "application/json" }];
+
+
+  HttpResponseHandler(response, {
+    header,
+    status: 404,
+    message: 'Not Found'
+  }
+  );
+}
+
 const main = () => {
   const port = BACKEND_PORT;
   const host = BACKEND_BASE_URL;
@@ -51,10 +64,15 @@ const main = () => {
   app.listen(port, host);
   app.cors(cors);
 
-  // routes
+  /* ------------------------------- user routes ------------------------------ */
   app.get("/test", simpleTest, simpleText);
   app.post("/signup", userControllers.signUp);
   app.get("/signup/verify-email/:id", userControllers.verifyUser);
+  app.post("/signin", userControllers.signIn);
+  // app.post("/reset-password/send");
+  // app.post("/reset-password/verify");
+
+  app.use(notFound);
 
   /**
    * WIP

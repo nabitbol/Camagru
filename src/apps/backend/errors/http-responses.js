@@ -14,7 +14,6 @@ const httpErrorUserInsertion = {
   header
 };
 
-
 const httpErrorUserUpdate = {
   status: 500,
   message: "Couldn't update user data",
@@ -33,6 +32,18 @@ const httpErrorEmailNotSent = {
   header
 };
 
+const httpEmailNotVerified = {
+  status: 403,
+  message: "User email not verified",
+  header
+}
+
+const httpInvalidCredentials = {
+  status: 400,
+  message: "Couldn't login, invalid credentials",
+  header
+}
+
 /* ------------------------------ Shared errors ----------------------------- */
 
 const httpDefaultError = {
@@ -47,4 +58,6 @@ export {
   httpErrorUserInsertion,
   httpErrorUserUpdate,
   httpErrorUserNotFound,
+  httpEmailNotVerified,
+  httpInvalidCredentials
 };

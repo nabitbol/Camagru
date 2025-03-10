@@ -1,4 +1,6 @@
+import { validateEmail, validatePassword } from '@camagru/field-check';
 import { apiCall } from "../../utils/api-services";
+
 
 const signup = async () => {
   const email = document.querySelector('#email').value;
@@ -12,12 +14,12 @@ const signup = async () => {
   passwordError.classList.add('hidden');
   credentialsError.classList.add('hidden');
 
-  if (document.camagru.validateEmail(email) === false) {
+  if (validateEmail(email) === false) {
     emailError.classList.remove('hidden');
     hasErrors = true;
   }
 
-  if (document.camagru.validatePassword(password) === false) {
+  if (validatePassword(password) === false) {
     passwordError.classList.remove('hidden');
     hasErrors = true;
   }

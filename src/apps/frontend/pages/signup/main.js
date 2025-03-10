@@ -1,3 +1,4 @@
+import { validateEmail, validateUsername, validatePassword } from '@camagru/field-check';
 import * as authService from '../../utils/auth-service.js'
 
 const signup = async () => {
@@ -16,17 +17,17 @@ const signup = async () => {
   passwordError.classList.add('hidden');
 
 
-  if (document.camagru.validateUsername(username) === false) {
+  if (validateUsername(username) === false) {
     usernameError.classList.remove('hidden');
     hasErrors = true;
   }
 
-  if (document.camagru.validateEmail(email) === false) {
+  if (validateEmail(email) === false) {
     emailError.classList.remove('hidden');
     hasErrors = true;
   }
 
-  if (document.camagru.validatePassword(password) === false) {
+  if (validatePassword(password) === false) {
     passwordError.classList.remove('hidden');
     hasErrors = true;
   }

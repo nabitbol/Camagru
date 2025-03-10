@@ -1,3 +1,4 @@
+import { validateEmail } from '@camagru/field-check';
 import { apiCall } from "../../utils/api-services";
 
 const requestPasswordReset = async () => {
@@ -7,7 +8,7 @@ const requestPasswordReset = async () => {
   let hasErrors = false;
   emailError.classList.add('hidden');
 
-  if (document.camagru.validateEmail(email) === false) {
+  if (validateEmail(email) === false) {
     emailError.classList.remove('hidden');
     hasErrors = true;
   }

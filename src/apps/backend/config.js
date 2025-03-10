@@ -34,7 +34,9 @@ const transporter = nodemailer.createTransport({
 const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
 const BACKEND_PORT = process.env.BACKEND_PORT;
 const CORS = { "Access-Control-Allow-Origin": process.env.CORS };
+const JWT_SECRET = process.env.JWT_SECRET;
+const TOKEN_EXPIRATION_TIME = process.env.TOKEN_EXPIRATION_TIME;
 
 /* -------------------------------------------------------------------------- */
 
-export { pgConfig, transporter, BACKEND_BASE_URL, BACKEND_PORT, CORS };
+export { pgConfig, transporter, BACKEND_BASE_URL, BACKEND_PORT, CORS, JWT_SECRET, TOKEN_EXPIRATION_TIME };

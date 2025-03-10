@@ -1,0 +1,10 @@
+{
+  "name": "@camagru/myjwt",
+  "version": "1.0.0",
+  "description": "A lightweight utility for JSON Web Token (JWT) signing, authentication, and integrity validation.",
+  "main": "index.js",
+  "type": "module",
+  "author": "nabitbol",
+  "license": "MIT",
+  "private": true
+}

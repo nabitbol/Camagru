@@ -6,7 +6,6 @@
 
     <link rel="stylesheet" type="text/css" href="../../global-style/main.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="../../global-scripts/main.js"></script>
     <script src="../../global-scripts/toggle-password-visbility.js"></script>
     <script src="main.js"></script>
 
@@ -34,7 +33,7 @@
           </div>
           <p id="password-error" class="error hidden">Invalid password</p>
           <div class="reset-password">
-            <a href="/request-password-reset/index.html">Reset password</a>
+            <a href="../request-password-reset/index.html">Reset password</a>
           </div>
         </div>
         <button class="primary" onClick="signup()">Sign in</button>
@@ -46,6 +45,6 @@
     </div>
   </body>
   <script>
-    initializePasswordVisibilityToggle();
+    initializePasswordVisibilityToggleListeners();
   </script>
 </html>
