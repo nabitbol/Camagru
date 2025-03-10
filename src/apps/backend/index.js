@@ -69,8 +69,8 @@ const main = () => {
   app.post("/signup", userControllers.signUp);
   app.get("/signup/verify-email/:id", userControllers.verifyUser);
   app.post("/signin", userControllers.signIn);
-  // app.post("/reset-password/send");
-  // app.post("/reset-password/verify");
+  app.put("/reset-password/send", userControllers.sendResetPassword);
+  app.put("/reset-password/verify/:id", userControllers.verifyResetPassword);
 
   app.use(notFound);
 

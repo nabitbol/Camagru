@@ -28,12 +28,25 @@ const UserDataAccess = (queryBuilder) => {
     }
   };
 
-  const getUserFromToken = async (token) => {
+  const getUserFromVerificationToken = async (token) => {
     try {
       const res = await queryBuilder
         .select(all)
         .from(table)
         .where({ email_verification_token: token })
+        .run();
+      return res.rows[0];
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const getUserFromResetPasswordToken = async (token) => {
+    try {
+      const res = await queryBuilder
+        .select(all)
+        .from(table)
+        .where({ pass_reset_token: token })
         .run();
       return res.rows[0];
     } catch (err) {
@@ -58,7 +71,8 @@ const UserDataAccess = (queryBuilder) => {
     updateUser,
     getAllUsers,
     getUserFromEmail,
-    getUserFromToken,
+    getUserFromVerificationToken,
+    getUserFromResetPasswordToken,
   };
 };
 

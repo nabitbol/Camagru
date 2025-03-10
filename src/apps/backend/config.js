@@ -27,6 +27,45 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const getVerifyEmailContent = (userEmail, username, verificationToken) => {
+  const path = "sign-up/verify-email";
+
+  return {
+    from: `"Camagru's team 📷" ${process.env.MAIL_USER}`,
+    to: userEmail,
+    subject: "Verification email ✔",
+    text: `Welcome ${username}! \n\n We are thrille to count you in. \n\n\
+To verify your account please click on the link below:\
+http://${BACKEND_BASE_URL}:${BACKEND_PORT}/${path}/${verificationToken}`,
+    html: `<h1>Welcome ${username}!</h1> \
+<p>We are thrille to count you in.</p>\
+<p>To verify your account please click on the link below:</p>\
+<a href="http://${BACKEND_BASE_URL}:${BACKEND_PORT}/${path}/${verificationToken}">link to \
+validate your account </a>`,
+  };
+
+};
+
+const getResetPasswordEmailContent = (userEmail, username, verificationToken) => {
+  const path = "reset-password/verify";
+
+  return {
+    from: `"Camagru's team 📷" ${process.env.MAIL_USER}`,
+    to: userEmail,
+    subject: "Reset password",
+    text: `Hi ${username}! \n\n
+To reset your password please clink on the link below:\
+http://${BACKEND_BASE_URL}:${BACKEND_PORT}/${path}/${verificationToken}`,
+    html: `<h1>Welcome ${username}!</h1> \
+<p>To reset your password please clink on the link below:</p>\
+<a href="http://${BACKEND_BASE_URL}:${BACKEND_PORT}/${path}/${verificationToken}">link to \
+validate your account </a>`,
+  };
+
+};
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                                  Web info                                  */
 /* -------------------------------------------------------------------------- */
@@ -39,4 +78,14 @@ const TOKEN_EXPIRATION_TIME = process.env.TOKEN_EXPIRATION_TIME;
 
 /* -------------------------------------------------------------------------- */
 
-export { pgConfig, transporter, BACKEND_BASE_URL, BACKEND_PORT, CORS, JWT_SECRET, TOKEN_EXPIRATION_TIME };
+export {
+  pgConfig,
+  transporter,
+  getVerifyEmailContent,
+  getResetPasswordEmailContent,
+  BACKEND_BASE_URL,
+  BACKEND_PORT,
+  CORS,
+  JWT_SECRET,
+  TOKEN_EXPIRATION_TIME
+};

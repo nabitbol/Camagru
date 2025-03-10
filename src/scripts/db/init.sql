@@ -14,6 +14,7 @@ CREATE TABLE
 		email text UNIQUE,
 		username text,
 		pass text,
+		pass_reset_token text,
 		email_verification_token text,
 		email_verified boolean,
 		email_notifications boolean

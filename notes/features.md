@@ -1,8 +1,8 @@
 # Features
 
-- [ ] Authentification
+- [x] Authentification
 - [ ] Client side validation
-- [ ] Server side validation
+- [x] Server side validation
 - [x] Password hashing
 - [ ] Handle XSS
 - [ ] SQL injection
@@ -11,8 +11,8 @@
 
 - [x] Sign up
   - [x] email verification
-- [ ] Sign in
-- [ ] Password reset
+- [x] Sign in
+- [x] Password reset
 - [ ] Disconnect
 - [ ] Edit profile
   - [ ] Username
